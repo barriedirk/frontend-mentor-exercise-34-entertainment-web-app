@@ -1,7 +1,0 @@
-https://www.themoviedb.org/settings/api
-
-API Read Access Token
-eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxZjdkYjA2OWMyODMxOWNhMmRmMDU0ZTZlYzZkZGE0NCIsIm5iZiI6MTc1NDAxNjc2MC44MDMsInN1YiI6IjY4OGMyYmY4MTdlYzRjZDUxMmRlNWQ3ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.rO66ToTyyBZSECzAHdA92dYx0YnMEZ-qeFm7nVvVFE4
-
-API Key
-1f7db069c28319ca2df054e6ec6dda44
