@@ -1,0 +1,27 @@
+.header {
+  background-color: var(--clr-blue-900);
+  padding: 15px;
+}
+
+.header__logo {
+  width: 25px;
+  height: 20px;
+}
+
+.header__nav {
+}
+
+.header__link {
+  width: 16px;
+  height: 16px;
+}
+
+.header__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  border: 1px solid var(--clr-white);
+}
+
+.header__profile {
+}

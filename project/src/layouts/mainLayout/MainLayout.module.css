@@ -1,0 +1,22 @@
+.ml {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "mlHeader"
+    "mlMain"
+    "mlFooter";
+  min-height: 100dvh;
+}
+
+.ml__header {
+  grid-name: mlHeader;
+}
+
+.ml__main {
+  grid-name: mlMain;
+}
+
+.ml__footer {
+  grid-name: mlFooter;
+}

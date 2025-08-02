@@ -1,0 +1,61 @@
+@layer base {
+  :root {
+    --clr-white: hsl(0, 100%, 100%);
+    --clr-black: hsl(0, 0%, 0%);
+
+    --clr-blue-950: hsl(223, 30%, 9%);
+    --clr-blue-900: hsl(223, 36%, 14%);
+    --clr-blue-500: hsl(223, 23%, 46%);
+
+    --clr-red-500: hsl(0, 97%, 63%);
+
+    --gradient-to-bottom: linear-gradient(
+      to-bottom,
+      hsla(0, 0%, 0%, 0),
+      hsla(0, 0%, 0%, 0.75)
+    );
+    --ff: "Outfit", sans-serif;
+
+    --fw-thin: 100;
+    --fw-extralight: 200;
+    --fw-light: 300;
+    --fw-normal: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    --fw-extrabold: 800;
+    --fw-black: 900;
+
+    --fs-100: 6.25rem;
+    --fs-96: 6rem;
+    --fs-80: 5rem;
+    --fs-72: 4.5rem;
+    --fs-56: 3.5rem;
+    --fs-48: 3rem;
+    --fs-44: 2.75rem;
+    --fs-40: 2.5rem;
+    --fs-32: 2rem;
+    --fs-28: 1.75rem;
+    --fs-26: 1.625rem;
+    --fs-24: 1.5rem;
+    --fs-20: 1.25rem;
+    --fs-18: 1.125rem;
+    --fs-16: 1rem;
+    --fs-15: 0.9375rem;
+    --fs-14: 0.875rem;
+    --fs-13: 0.8125rem;
+    --fs-12: 0.75rem;
+    --fs-11: 0.6875rem;
+
+    --spacing-100: 0.5rem; /* 8px */
+    --spacing-200: 1rem; /* 16px */
+    --spacing-300: 1.5rem; /* 24px */
+    --spacing-400: 2rem; /* 32px */
+    --spacing-500: 2.5rem; /* 40px */
+    --spacing-600: 3rem; /* 48px */
+    --spacing-700: 3.5rem; /* 56px */
+    --spacing-800: 4rem; /* 64px */
+    --spacing-900: 4.5rem; /* 72px */
+    --spacing-1000: 5rem; /* 80px */
+  }
+}
