@@ -1,3 +1,10 @@
+import React from "react";
+
+import IconNavBookmark from "./icons/IconNavBookmark";
+import IconNavTVSeries from "./icons/IconNavTVSeries";
+import IconNavHome from "./icons/IconNavHome";
+import IconNavMovies from "./icons/IconNavMovies";
+
 interface IconProps {
   name:
     | "logo"
@@ -5,15 +12,17 @@ interface IconProps {
     | "bookmarkFull"
     | "categoryMovie"
     | "categoryTV"
-    | "navBookmark"
+    | "play"
+    | "search"
     | "navHome"
     | "navMovies"
     | "navTVSeries"
-    | "play"
-    | "search";
+    | "navBookmark";
   className?: string;
   alt?: string;
 }
+
+const spriteIcons = ["navBookmark", "navHome", "navMovies", "navTVSeries"];
 
 const iconMap = {
   logo: new URL("../assets/logo.svg", import.meta.url).href,
@@ -31,21 +40,22 @@ const iconMap = {
   ).href,
   categoryTV: new URL("../assets/icons/icon-category-tv.svg", import.meta.url)
     .href,
-  navBookmark: new URL("../assets/icons/icon-nav-bookmark.svg", import.meta.url)
-    .href,
-  navHome: new URL("../assets/icons/icon-nav-home.svg", import.meta.url).href,
-  navMovies: new URL("../assets/icons/icon-nav-movies.svg", import.meta.url)
-    .href,
-  navTVSeries: new URL(
-    "../assets/icons/icon-nav-tv-series.svg",
-    import.meta.url
-  ).href,
   play: new URL("../assets/icons/icon-play.svg", import.meta.url).href,
   search: new URL("../assets/icons/icon-search.svg", import.meta.url).href,
+  navHome: IconNavHome,
+  navMovies: IconNavMovies,
+  navTVSeries: IconNavTVSeries,
+  navBookmark: IconNavBookmark,
 };
 
 export default function Icon({ name, className, alt }: IconProps) {
   const src = iconMap[name];
 
-  return <img src={src} className={className} alt={alt || name} />;
+  if (spriteIcons.includes(name) && typeof src !== "string") {
+    const Component = iconMap[name] as React.FC<React.SVGProps<SVGSVGElement>>;
+
+    return <Component className={className} aria-label={alt || name} />;
+  }
+
+  return <img src={src as string} className={className} alt={alt || name} />;
 }

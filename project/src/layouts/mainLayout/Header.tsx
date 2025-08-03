@@ -30,7 +30,7 @@ export default function Header({ className }: HeaderProps) {
     <header
       className={clsx(
         className,
-        "flex flex-row justify-between items-center",
+        "flex flex-row justify-between items-center lg:flex-col lg:h-[90dvh] lg:max-h-[800px] lg:w-[96px] lg:justify-start lg:gap-16",
         styles["header"]
       )}
     >
@@ -40,7 +40,7 @@ export default function Header({ className }: HeaderProps) {
 
       <nav
         className={clsx(
-          "flex flex-row justify-center items-center gap-8",
+          "flex flex-row justify-center items-center gap-8 lg:flex-col",
           styles["header__nav"]
         )}
         aria-label="Primary navigation"
@@ -49,41 +49,61 @@ export default function Header({ className }: HeaderProps) {
           to="/"
           aria-label="Home"
           className={({ isActive }) =>
-            clsx(classNameLink, isActive && "text-white", "text-neutral-400")
+            clsx(
+              "h-[20px] w-[20px]",
+              classNameLink,
+              isActive && "text-white",
+              !isActive && "text-blue-500"
+            )
           }
         >
-          <Icon name="navHome" />
+          <Icon className="h-[20px] w-[20px]" name="navHome" />
         </NavLink>
         <NavLink
           className={({ isActive }) =>
-            clsx(classNameLink, isActive && "text-white", "text-neutral-400")
+            clsx(
+              "h-[20px] w-[20px]",
+              classNameLink,
+              isActive && "text-white",
+              !isActive && "text-blue-500"
+            )
           }
           to="/movies"
           aria-label="Category: Movies"
         >
-          <Icon name="categoryMovie" />
+          <Icon className="h-[20px] w-[20px]" name="navMovies" />
         </NavLink>
         <NavLink
           className={({ isActive }) =>
-            clsx(classNameLink, isActive && "text-white", "text-neutral-400")
+            clsx(
+              "h-[20px] w-[20px]",
+              classNameLink,
+              isActive && "text-white",
+              !isActive && "text-blue-500"
+            )
           }
           to="/tv-series"
           aria-label="Category: TV"
         >
-          <Icon name="categoryTV" />
+          <Icon className="h-[20px] w-[20px]" name="navTVSeries" />
         </NavLink>
         <NavLink
           className={({ isActive }) =>
-            clsx(classNameLink, isActive && "text-white", "text-neutral-400")
+            clsx(
+              "h-[20px] w-[20px]",
+              classNameLink,
+              isActive && "text-white",
+              !isActive && "text-blue-500"
+            )
           }
           to="/bookmarks"
-          aria-label="Bookmark Empty"
+          aria-label="Bookmark"
         >
-          <Icon name="bookmarkEmpty" />
+          <Icon className="h-[20px] w-[20px]" name="navBookmark" />
         </NavLink>
       </nav>
 
-      <div className={clsx(styles["header__profile"])}>
+      <div className={clsx(styles["header__profile"], "lg:mt-auto")}>
         <Avatar className={clsx(styles["header__avatar"])} />
       </div>
     </header>
