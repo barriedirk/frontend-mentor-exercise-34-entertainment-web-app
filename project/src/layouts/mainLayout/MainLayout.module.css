@@ -19,6 +19,7 @@
 
 .ml__footer {
   grid-name: mlFooter;
+  width: 100%;
 }
 
 @media screen and (min-width: 48em) {
@@ -29,18 +30,15 @@
 
 @media screen and (min-width: 64em) {
   .ml {
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: 1fr auto;
     grid-template-areas:
       "mlHeader mlMain"
       "mlFooter mlFooter";
+    gap: 10px;
   }
 
   .ml__footer {
-    width: 100vw;
-  }
-
-  .ml__main {
-    width: calc(100vw - 170px);
+    grid-column: span 2;
   }
 }

@@ -13,7 +13,7 @@ export default function MainLayout() {
       <main className={clsx(styles["ml__main"])}>
         <Outlet />
       </main>
-      <Footer className={clsx(styles["ml_footer"])} />
+      <Footer className={clsx(styles["ml__footer"])} />
     </div>
   );
 }

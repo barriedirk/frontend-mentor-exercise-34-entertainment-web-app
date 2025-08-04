@@ -8,7 +8,7 @@ export default function Footer({ className }: FooterProps) {
   return (
     <footer
       className={clsx(
-        "text-center py-4 bg-blue-950 text-white text-xs",
+        "text-center py-4 bg-blue-950 text-gray-500 text-xs",
         className
       )}
     >
