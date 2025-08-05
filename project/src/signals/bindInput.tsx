@@ -7,6 +7,10 @@ export const bindInput = <T extends Signal>(
 
   return {
     value: signal as SignalType,
-    onInput: (event) => (signal.value = event.currentTarget.value),
+    onInput: (event) => {
+      event.preventDefault();
+
+      signal.value = event.currentTarget.value;
+    },
   };
 };

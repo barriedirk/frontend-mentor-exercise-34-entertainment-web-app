@@ -16,10 +16,10 @@ interface HeaderProps {
 export default function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
 
-  useKeyboardShortcut("h", () => navigate("/"));
-  useKeyboardShortcut("m", () => navigate("/movies"));
-  useKeyboardShortcut("t", () => navigate("/tv"));
-  useKeyboardShortcut("b", () => navigate("/bookmarks"));
+  useKeyboardShortcut("h", () => navigate("/"), ["alt"]);
+  useKeyboardShortcut("m", () => navigate("/movies"), []);
+  useKeyboardShortcut("t", () => navigate("/tv"), ["alt"]);
+  useKeyboardShortcut("b", () => navigate("/bookmarks"), ["alt"]);
 
   const classNameLink = clsx(
     "focus:outline-none focus-visible:ring-2 focus-visible:ring-white",

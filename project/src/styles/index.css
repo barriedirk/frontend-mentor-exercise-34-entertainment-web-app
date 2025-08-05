@@ -2,8 +2,8 @@
 
 @import "./base/variables.css";
 @import "./base/reset.css";
-@import "./components/typography.css";
 
+@import "./helpers/typography.css";
 @import "./helpers/utilities.css";
 
 @layer base {

@@ -1,58 +1,79 @@
-@layer utilities {
-  .text-white-custom {
-    color: var(--clr-white);
-  }
-  .text-black-custom {
-    color: var(--clr-black);
-  }
-  .text-blue-950 {
-    color: var(--clr-blue-950);
-  }
-  .text-blue-900 {
-    color: var(--clr-blue-900);
-  }
-  .text-blue-500 {
-    color: var(--clr-blue-500);
-  }
-  .text-red-500 {
-    color: var(--clr-red-500);
-  }
+@utility text-white-custom {
+  color: var(--clr-white);
+}
 
-  .bg-white-custom {
-    background-color: var(--clr-white);
-  }
-  .bg-black-custom {
-    background-color: var(--clr-black);
-  }
-  .bg-blue-950 {
-    background-color: var(--clr-blue-950);
-  }
-  .bg-blue-900 {
-    background-color: var(--clr-blue-900);
-  }
-  .bg-blue-500 {
-    background-color: var(--clr-blue-500);
-  }
-  .bg-red-500 {
-    background-color: var(--clr-red-500);
-  }
+@utility text-black-custom {
+  color: var(--clr-black);
+}
 
-  .border-white-custom {
-    border-color: var(--clr-white);
-  }
-  .border-black-custom {
-    border-color: var(--clr-black);
-  }
-  .border-blue-950 {
-    border-color: var(--clr-blue-950);
-  }
-  .border-blue-900 {
-    border-color: var(--clr-blue-900);
-  }
-  .border-blue-500 {
-    border-color: var(--clr-blue-500);
-  }
-  .border-red-500 {
-    border-color: var(--clr-red-500);
-  }
+@utility text-blue-950 {
+  color: var(--clr-blue-950);
+}
+
+@utility text-blue-900 {
+  color: var(--clr-blue-900);
+}
+
+@utility text-blue-500 {
+  color: var(--clr-blue-500);
+}
+
+@utility text-red-500 {
+  color: var(--clr-red-500);
+}
+
+@utility bg-white-custom {
+  background-color: var(--clr-white);
+}
+
+@utility bg-black-custom {
+  background-color: var(--clr-black);
+}
+
+@utility bg-blue-950 {
+  background-color: var(--clr-blue-950);
+}
+
+@utility bg-blue-900 {
+  background-color: var(--clr-blue-900);
+}
+
+@utility bg-blue-500 {
+  background-color: var(--clr-blue-500);
+}
+
+@utility bg-red-500 {
+  background-color: var(--clr-red-500);
+}
+
+@utility border-white-custom {
+  border-color: var(--clr-white);
+}
+
+@utility border-black-custom {
+  border-color: var(--clr-black);
+}
+
+@utility border-blue-950 {
+  border-color: var(--clr-blue-950);
+}
+
+@utility border-blue-900 {
+  border-color: var(--clr-blue-900);
+}
+
+@utility border-blue-500 {
+  border-color: var(--clr-blue-500);
+}
+
+@utility border-red-500 {
+  border-color: var(--clr-red-500);
+}
+
+@utility radius-28px {
+  border-radius: 28px;
+}
+
+@utility radius-8px {
+  border-radius: 8px;
 }

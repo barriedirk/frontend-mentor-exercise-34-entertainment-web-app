@@ -22,7 +22,7 @@ export default function Search({
     <div
       className={clsx(
         className,
-        "flex flex-row gap-4 justify-center items-center text-white-custom text-preset-2-mobile"
+        "flex flex-row gap-4 justify-center items-center text-white-custom"
       )}
     >
       <Icon
@@ -31,7 +31,7 @@ export default function Search({
       />
       <input
         ref={inputRef}
-        className="grow-1 shrink-1 p-1"
+        className="grow-1 shrink-1 p-1 text-preset-2-mobile lg:text-preset-2-light"
         type="text"
         placeholder={placeholder || ""}
         onFocus={() => inputRef.current?.select()}
