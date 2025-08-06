@@ -54,18 +54,20 @@ export default function Home() {
   return (
     <section className={clsx(styles["homes"], "mt-[24px] ml-[16px] mr-[16px]")}>
       <Search placeholder={"Home"} searchTerm={searchTerm} />
-      <div className={clsx(styles["home__results"], "mt-[24px]")}>
-        <h2 className="text-white-custom text-preset-1-mobile lg:text-preset-1">
+      <div className={clsx(styles["home__results"])}>
+        <h2 className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1">
           Trending
         </h2>
         <section
           className={clsx(
             styles["home__results--grid"],
-            "grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+            "grid-result grid-result--trending"
           )}
         >
           {trendingItems.value.length === 0 ? (
-            <p className="text-gray-400">No trending titles found.</p>
+            <p className="text-blue-500 text-preset-3 my-[24px]">
+              No trending titles found.
+            </p>
           ) : (
             trendingItems.value.map((item) => (
               <Movie key={item.title} type="trending" item={item} />
@@ -73,18 +75,20 @@ export default function Home() {
           )}
         </section>
       </div>
-      <div className={clsx(styles["home__results"], "mt-[24px]")}>
-        <h2 className="text-white-custom text-preset-1-mobile lg:text-preset-1">
+      <div className={clsx(styles["home__results"])}>
+        <h2 className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1">
           Recommended for you
         </h2>
         <section
           className={clsx(
             styles["home__results--grid"],
-            "grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+            "grid-result grid-result--regular"
           )}
         >
           {recommendedItems.value.length === 0 ? (
-            <p className="text-gray-400">No recommendations found.</p>
+            <p className="text-blue-500 text-preset-3 my-[24px]">
+              No recommendations found.
+            </p>
           ) : (
             recommendedItems.value.map((item) => (
               <Movie key={item.title} type="regular" item={item} />

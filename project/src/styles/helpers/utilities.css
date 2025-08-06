@@ -2,6 +2,10 @@
   color: var(--clr-white);
 }
 
+@utility text-white-75-custom {
+  color: var(--clr-white-75);
+}
+
 @utility text-black-custom {
   color: var(--clr-black);
 }

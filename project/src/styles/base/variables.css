@@ -1,6 +1,7 @@
 @layer base {
   :root {
     --clr-white: hsl(0, 100%, 100%);
+    --clr-white-75: hsla(0, 100%, 100%, 0.75);
     --clr-black: hsl(0, 0%, 0%);
 
     --clr-blue-950: hsl(223, 30%, 9%);

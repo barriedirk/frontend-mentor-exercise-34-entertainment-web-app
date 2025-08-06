@@ -15,7 +15,8 @@ interface MovieProps {
 
 export default function Movie({ type, item }: MovieProps) {
   const isRegular = type === "regular";
-  const { title, year, category, thumbnail, isBookmarked } = item;
+  const { title, year, category, rating, thumbnail, isBookmarked } = item;
+  const isMovie = category === "Movie";
 
   const bookmark = () => {
     console.log(`Bookmark toggled for: ${title}`);
@@ -29,53 +30,84 @@ export default function Movie({ type, item }: MovieProps) {
     <figure
       className={clsx(
         styles["movie"],
-        "relative radius-8px",
+        "relative",
         isRegular ? styles["movie--regular"] : styles["movie--trending"]
       )}
     >
       {isRegular && (
-        <picture>
+        <picture className={styles["movie__picture"]}>
           <source media="(min-width:1000px)" srcSet={thumbnail.regular.large} />
           <source media="(min-width:500px)" srcSet={thumbnail.regular.medium} />
           <img
+            className={clsx(styles["movie__image--regular"], "radius-8px")}
             src={thumbnail.regular.small}
             alt={`Thumbnail for ${title} (${category}, ${year})`}
           />
         </picture>
       )}
       {!isRegular && (
-        <picture>
+        <picture className={styles["movie__picture"]}>
           <source
             media="(min-width:1000px)"
             srcSet={thumbnail.trending.large}
           />
           <img
+            className={clsx(styles["movie__image--trending"], "radius-8px")}
             src={thumbnail.trending.small}
             alt={`Thumbnail for ${title} (${category}, ${year})`}
           />
         </picture>
       )}
-      <figcaption className={styles["movie__caption"]}>
-        <h3 className="text-lg font-bold">{title}</h3>
-        <p className="text-sm text-gray-400">
-          {year} • {category}
+
+      <figcaption className={clsx("movie__caption flex gap-2 flex-col")}>
+        <p
+          className={clsx(
+            "flex justify-start items-center gap-2 text-white-75-custom",
+            isRegular
+              ? "text-preset-6-mobile md:text-preset-5"
+              : "text-preset-5-mobile md:text-preset-4"
+          )}
+        >
+          {year} •
+          <Icon
+            name={isMovie ? "navMovies" : "navHome"}
+            className="text-white-75-custom w-[12px] h-[12px]"
+          />
+          {category} • {rating}
         </p>
+
+        <h3
+          className={clsx(
+            "text-white-custom",
+            isRegular
+              ? "text-preset-4-mobile md:text-preset-5"
+              : "text-preset-3-mobile md:text-preset-3"
+          )}
+        >
+          {title}
+        </h3>
       </figcaption>
 
-      {isBookmarked && (
+      {!isBookmarked && (
         <button
           type="button"
           aria-label={
             isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"
           }
-          className={clsx(styles["movie__bookmark"], "cursor-pointer")}
+          className={clsx(
+            styles["movie__bookmark"],
+            "cursor-pointer flex justify-center items-center"
+          )}
           onClick={bookmark}
         >
-          <Icon name="bookmarkEmpty" />
+          <Icon
+            className={clsx("w-[11px] h-[14px] z-10 text-white-custom")}
+            name="bookmarkEmpty"
+          />
         </button>
       )}
 
-      <button
+      {/* <button
         type="button"
         aria-label={`Play ${title}`}
         className={clsx(
@@ -88,7 +120,7 @@ export default function Movie({ type, item }: MovieProps) {
           <Icon name="play" />
           <span>Play</span>
         </span>
-      </button>
+      </button> */}
     </figure>
   );
 }
