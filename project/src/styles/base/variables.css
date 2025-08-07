@@ -2,7 +2,9 @@
   :root {
     --clr-white: hsl(0, 100%, 100%);
     --clr-white-75: hsla(0, 100%, 100%, 0.75);
+    --clr-white-30: hsla(0, 100%, 100%, 0.3);
     --clr-black: hsl(0, 0%, 0%);
+    --clr-black-50: hsla(0, 0%, 0%, 0.5);
 
     --clr-blue-950: hsl(223, 30%, 9%);
     --clr-blue-900: hsl(223, 36%, 14%);

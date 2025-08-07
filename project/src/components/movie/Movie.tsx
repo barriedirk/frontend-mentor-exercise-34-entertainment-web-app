@@ -39,7 +39,7 @@ export default function Movie({ type, item }: MovieProps) {
           <source media="(min-width:1000px)" srcSet={thumbnail.regular.large} />
           <source media="(min-width:500px)" srcSet={thumbnail.regular.medium} />
           <img
-            className={clsx(styles["movie__image--regular"], "radius-8px")}
+            className="movie__image radius-8px"
             src={thumbnail.regular.small}
             alt={`Thumbnail for ${title} (${category}, ${year})`}
           />
@@ -52,7 +52,7 @@ export default function Movie({ type, item }: MovieProps) {
             srcSet={thumbnail.trending.large}
           />
           <img
-            className={clsx(styles["movie__image--trending"], "radius-8px")}
+            className="movie__image radius-8px"
             src={thumbnail.trending.small}
             alt={`Thumbnail for ${title} (${category}, ${year})`}
           />
@@ -101,26 +101,35 @@ export default function Movie({ type, item }: MovieProps) {
           onClick={bookmark}
         >
           <Icon
-            className={clsx("w-[11px] h-[14px] z-10 text-white-custom")}
+            className={clsx(
+              "w-[11px] h-[14px] z-40 text-black-custom hover:text-white-custom"
+            )}
             name="bookmarkEmpty"
           />
         </button>
       )}
 
-      {/* <button
-        type="button"
-        aria-label={`Play ${title}`}
+      <div
         className={clsx(
           styles["movie__play"],
-          "absolute inset-0 z-20 flex justify-center items-center opacity-15"
+          "absolute inset-0 z-20 flex justify-center items-center"
         )}
-        onClick={play}
       >
-        <span className="flex flex-row gap-2 items-center border radius-28px p-2">
-          <Icon name="play" />
-          <span>Play</span>
-        </span>
-      </button> */}
+        <button
+          type="button"
+          aria-label={`Play ${title}`}
+          className={clsx(
+            styles["movie__btn-play"],
+            "flex justify-center items-center gap-2 radius-28px"
+          )}
+          onClick={play}
+        >
+          <span className="flex flex-row gap-2 items-center border radius-28px p-2 text-preset-3-mobile md:text-preset-3">
+            <Icon name="play" className="h-[20px] w-[20px]" />
+            <span>Play</span>
+          </span>
+        </button>
+      </div>
     </figure>
   );
 }

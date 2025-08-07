@@ -4,6 +4,8 @@ import IconNavBookmark from "./icons/IconNavBookmark";
 import IconNavTVSeries from "./icons/IconNavTVSeries";
 import IconNavHome from "./icons/IconNavHome";
 import IconNavMovies from "./icons/IconNavMovies";
+import IconBookmarkEmpty from "./icons/IconBookmarkEmpty";
+import IconBookmarkFull from "./icons/IconBookmarkFull";
 
 interface IconProps {
   name:
@@ -22,18 +24,17 @@ interface IconProps {
   alt?: string;
 }
 
-const spriteIcons = ["navBookmark", "navHome", "navMovies", "navTVSeries"];
+const spriteIcons = [
+  "navBookmark",
+  "navHome",
+  "navMovies",
+  "navTVSeries",
+  "bookmarkEmpty",
+  "bookmarkFull",
+];
 
 const iconMap = {
   logo: new URL("../assets/logo.svg", import.meta.url).href,
-  bookmarkEmpty: new URL(
-    "../assets/icons/icon-bookmark-empty.svg",
-    import.meta.url
-  ).href,
-  bookmarkFull: new URL(
-    "../assets/icons/icon-bookmark-full.svg",
-    import.meta.url
-  ).href,
   categoryMovie: new URL(
     "../assets/icons/icon-category-movie.svg",
     import.meta.url
@@ -42,6 +43,8 @@ const iconMap = {
     .href,
   play: new URL("../assets/icons/icon-play.svg", import.meta.url).href,
   search: new URL("../assets/icons/icon-search.svg", import.meta.url).href,
+  bookmarkEmpty: IconBookmarkEmpty,
+  bookmarkFull: IconBookmarkFull,
   navHome: IconNavHome,
   navMovies: IconNavMovies,
   navTVSeries: IconNavTVSeries,
