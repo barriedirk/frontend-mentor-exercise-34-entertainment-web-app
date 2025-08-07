@@ -28,6 +28,7 @@ export default function Movie({ type, item }: MovieProps) {
 
   return (
     <figure
+      tabIndex={0}
       className={clsx(
         styles["movie"],
         isRegular ? styles["movie--regular"] : styles["movie--trending"]

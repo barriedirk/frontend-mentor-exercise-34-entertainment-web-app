@@ -60,6 +60,9 @@ export default function Home() {
             Trending
           </h2>
           <section
+            tabIndex={0}
+            role="region"
+            aria-label="Trending movies"
             className={clsx(
               styles["home__results--grid"],
               "gap-5",
@@ -79,8 +82,12 @@ export default function Home() {
           </section>
         </div>
       )}
+
       <div className={clsx(styles["home__results"])}>
-        <h2 className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1">
+        <h2
+          className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1"
+          aria-live="polite"
+        >
           {debouncedSearchTerm.value.length === 0 &&
             recommendedItems.value.length > 0 &&
             "Recommended for you"}
@@ -92,6 +99,9 @@ export default function Home() {
             `Found ${recommendedItems.value.length} results for ‘${debouncedSearchTerm.value}’`}
         </h2>
         <section
+          tabIndex={0}
+          role="region"
+          aria-label="Recommended movies"
           className={clsx(
             styles["home__results--grid"],
             "grid-result grid-result--regular"
@@ -102,7 +112,6 @@ export default function Home() {
           ))}
         </section>
       </div>
-      {/* <h1>Home - {debouncedSearchTerm.value}</h1> */}
     </section>
   );
 }
