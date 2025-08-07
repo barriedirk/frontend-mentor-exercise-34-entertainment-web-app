@@ -1,6 +1,5 @@
 import { useComputed, useSignal, useSignalEffect } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
-import { useEffect } from "react";
 
 import clsx from "clsx";
 
@@ -61,8 +60,10 @@ export default function Home() {
         <section
           className={clsx(
             styles["home__results--grid"],
+            "gap-5",
             "grid-result grid-result--trending"
           )}
+          style={{ WebkitOverflowScrolling: "touch" }}
         >
           {trendingItems.value.length === 0 ? (
             <p className="text-blue-500 text-preset-3 my-[24px]">

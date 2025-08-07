@@ -30,7 +30,6 @@ export default function Movie({ type, item }: MovieProps) {
     <figure
       className={clsx(
         styles["movie"],
-        "relative",
         isRegular ? styles["movie--regular"] : styles["movie--trending"]
       )}
     >
@@ -39,7 +38,10 @@ export default function Movie({ type, item }: MovieProps) {
           <source media="(min-width:1000px)" srcSet={thumbnail.regular.large} />
           <source media="(min-width:500px)" srcSet={thumbnail.regular.medium} />
           <img
-            className="movie__image radius-8px"
+            className={clsx(
+              styles["movie__image--regular"],
+              "movie__image radius-8px"
+            )}
             src={thumbnail.regular.small}
             alt={`Thumbnail for ${title} (${category}, ${year})`}
           />
@@ -52,7 +54,10 @@ export default function Movie({ type, item }: MovieProps) {
             srcSet={thumbnail.trending.large}
           />
           <img
-            className="movie__image radius-8px"
+            className={clsx(
+              styles["movie__image--trending"],
+              "movie__image radius-8px"
+            )}
             src={thumbnail.trending.small}
             alt={`Thumbnail for ${title} (${category}, ${year})`}
           />

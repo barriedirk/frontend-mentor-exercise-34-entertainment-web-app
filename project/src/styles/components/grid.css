@@ -5,9 +5,12 @@
 
   .grid-result--trending {
     display: flex;
-    overflow: hidden;
+    overflow-x: auto;
+    scroll-behavior: smooth;
     flex-wrap: nowrap;
     scrollbar-width: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
 
     & > * {
       flex: 0 0 240px;
