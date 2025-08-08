@@ -1,8 +1,7 @@
-// components/MovieSection.tsx
-
 import clsx from "clsx";
+
 import Movie from "@/components/movie/Movie";
-import type { MediaItem } from "@/types/media";
+import type { MediaItem } from "@/models/media";
 
 interface MovieSectionProps {
   title: string;
@@ -11,6 +10,11 @@ interface MovieSectionProps {
   ariaLabel: string;
   showWhenEmpty?: boolean;
   emptyMessage?: string;
+
+  isPaginated?: boolean;
+  onLoadMore?: () => void;
+  hasMore?: boolean;
+  loading?: boolean;
 }
 
 export default function MovieSection({
@@ -20,6 +24,10 @@ export default function MovieSection({
   ariaLabel,
   showWhenEmpty = false,
   emptyMessage = "No results found.",
+  isPaginated = false,
+  onLoadMore,
+  hasMore = false,
+  loading = false,
 }: MovieSectionProps) {
   return (
     <div className="my-6">
@@ -31,10 +39,10 @@ export default function MovieSection({
         role="region"
         aria-label={ariaLabel}
         className={clsx(
-          "grid gap-5",
+          "gap-5",
           sectionType === "trending"
             ? "grid-result grid-result--trending"
-            : "grid-result grid-result--regular"
+            : "grid grid-result grid-result--regular"
         )}
         style={{ WebkitOverflowScrolling: "touch" }}
       >
@@ -52,6 +60,23 @@ export default function MovieSection({
           ))
         )}
       </section>
+
+      {isPaginated && hasMore && !loading && (
+        <div className="mt-6 flex justify-center text-preset-3">
+          <button
+            onClick={onLoadMore}
+            className="px-6 py-2 rounded bg-white text-black hover:bg-gray-200 transition"
+          >
+            Load More
+          </button>
+        </div>
+      )}
+
+      {loading && (
+        <p className="text-center text-blue-500 mt-4 text-preset-3">
+          Loading more...
+        </p>
+      )}
     </div>
   );
 }

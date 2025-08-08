@@ -1,117 +1,104 @@
-import { useComputed, useSignal, useSignalEffect } from "@preact/signals-react";
+import { useEffect, useState } from "react";
 import { useSignals } from "@preact/signals-react/runtime";
 
-import clsx from "clsx";
-
-import styles from "./Home.module.css";
-
-import { useDebouncedSignal } from "@/hooks/useDebouncedSignal";
-import Movie from "@/components/movie/Movie";
+import MovieSection from "@/components/movie/MovieSection";
 import Search from "@/components/forms/search/Search";
 
-import type { MediaItem } from "@/types/media";
-import mediaData from "@/data/data.json";
+import { useMediaSearch } from "@/hooks/useMediaSearch";
+
+import type { MediaItem } from "@/models/media";
+
+import {
+  fetchRecommendedMedia,
+  fetchTrendingMedia,
+  type FetchRecommendedMediaResponse,
+} from "@/api/tmdb";
+import { useApi } from "@/hooks/useApi";
 
 export default function Home() {
   useSignals();
 
-  const items = mediaData as MediaItem[];
-  const searchTerm = useSignal<string>("");
-  const debouncedSearchTerm = useDebouncedSignal(searchTerm, 500);
+  const [page, setPage] = useState(1);
 
-  // useEffect(() => {}, []);
-  // const searchValue = useComputed(() => {
-  //   console.log("useComputed", searchTerm.value);
-
-  //   return searchTerm.value;
-  // });
-
-  useSignalEffect(() => {
-    console.log("Home", searchTerm.value);
+  const {
+    loading: trendingLoading,
+    error: trendingError,
+    data: trendingItems,
+  } = useApi<MediaItem[], number>(fetchTrendingMedia, {
+    autoFetch: true,
+    params: 1,
   });
 
-  const trendingItems = useComputed(() =>
-    items.filter(
-      (item) =>
-        item.isTrending &&
-        item.title
-          .toLowerCase()
-          .includes(debouncedSearchTerm.value.toLowerCase())
-    )
-  );
+  const {
+    loading: recommendedLoading,
+    error: recommendedError,
+    data: recommendedData,
+    fetch: recommendedFetch,
+  } = useApi<FetchRecommendedMediaResponse, number>(fetchRecommendedMedia, {
+    autoFetch: true,
+    params: 1,
+  });
 
-  const recommendedItems = useComputed(() =>
-    items.filter(
-      (item) =>
-        !item.isTrending &&
-        item.title
-          .toLowerCase()
-          .includes(debouncedSearchTerm.value.toLowerCase())
-    )
+  const { searchTerm, debouncedSearchTerm, filteredItems } = useMediaSearch(
+    recommendedData?.items ?? []
   );
 
   return (
-    <section className={clsx(styles["homes"], "mt-[24px] ml-[16px] mr-[16px]")}>
-      <Search placeholder={"Home"} searchTerm={searchTerm} />
-
-      {debouncedSearchTerm.value.length === 0 && (
-        <div className={clsx(styles["home__results"])}>
-          <h2 className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1">
-            Trending
-          </h2>
-          <section
-            tabIndex={0}
-            role="region"
-            aria-label="Trending movies"
-            className={clsx(
-              styles["home__results--grid"],
-              "gap-5",
-              "grid-result grid-result--trending"
-            )}
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
-            {trendingItems.value.length === 0 ? (
-              <p className="text-blue-500 text-preset-3 my-[24px]">
-                No trending titles found.
-              </p>
-            ) : (
-              trendingItems.value.map((item) => (
-                <Movie key={item.title} type="trending" item={item} />
-              ))
-            )}
-          </section>
-        </div>
+    <section className="mt-[24px] mx-[16px]">
+      <Search
+        placeholder="Search for movies or TV Series"
+        searchTerm={searchTerm}
+      />
+      {trendingLoading && (
+        <p className="text-white-custom text-preset-3">Loading trending ...</p>
       )}
+      {!trendingLoading && !!trendingError && (
+        <p className="text-red-500 text-preset-3">
+          Loading Error Trending: {String(trendingError)}
+        </p>
+      )}
+      {!trendingLoading &&
+        !trendingError &&
+        debouncedSearchTerm.value.length === 0 && (
+          <MovieSection
+            title="Trending"
+            items={(trendingItems as MediaItem[]) || []}
+            sectionType="trending"
+            ariaLabel="Trending"
+          />
+        )}
 
-      <div className={clsx(styles["home__results"])}>
-        <h2
-          className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1"
-          aria-live="polite"
-        >
-          {debouncedSearchTerm.value.length === 0 &&
-            recommendedItems.value.length > 0 &&
-            "Recommended for you"}
-          {debouncedSearchTerm.value.length > 0 &&
-            recommendedItems.value.length === 0 &&
-            "No recommendations found"}
-          {debouncedSearchTerm.value.length > 0 &&
-            recommendedItems.value.length > 0 &&
-            `Found ${recommendedItems.value.length} results for ‘${debouncedSearchTerm.value}’`}
-        </h2>
-        <section
-          tabIndex={0}
-          role="region"
-          aria-label="Recommended movies"
-          className={clsx(
-            styles["home__results--grid"],
-            "grid-result grid-result--regular"
-          )}
-        >
-          {recommendedItems.value.map((item) => (
-            <Movie key={item.title} type="regular" item={item} />
-          ))}
-        </section>
-      </div>
+      {recommendedLoading && (
+        <p className="text-white-custom text-preset-3">
+          Loading movies and TV Series recommended ...
+        </p>
+      )}
+      {!recommendedLoading && !!recommendedError && (
+        <p className="text-red-500 text-preset-3">
+          Movies and TV Series Error: {String(recommendedError)}
+        </p>
+      )}
+      <MovieSection
+        title={
+          debouncedSearchTerm.value.length === 0
+            ? "Recommended for you"
+            : filteredItems.value.length === 0
+              ? "No movies or TV Series found"
+              : `Found ${filteredItems.value.length} result${
+                  filteredItems.value.length > 1 ? "s" : ""
+                } for '${debouncedSearchTerm.value}'`
+        }
+        items={filteredItems.value}
+        sectionType="regular"
+        ariaLabel="Movie or TV Series list"
+        isPaginated
+        onLoadMore={() => {
+          setPage((page) => page + 1);
+          recommendedFetch(page + 1);
+        }}
+        hasMore={recommendedData?.hasMore}
+        loading={recommendedLoading}
+      />
     </section>
   );
 }

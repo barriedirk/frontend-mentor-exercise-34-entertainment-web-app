@@ -1,5 +1,5 @@
 import { signal, computed, effect } from "@preact/signals-react";
-import type { MediaItem } from "@/types/media";
+import type { MediaItem } from "@/models/media";
 
 export const searchHomeTerm = signal<string>("");
 

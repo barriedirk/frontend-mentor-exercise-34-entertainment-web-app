@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "@/features/home/Home";
 import MainLayout from "@/layouts/mainLayout/MainLayout";
 
-const Movies = lazy(() => import("./features/home/Home"));
+const Movies = lazy(() => import("./features/movies/Movies"));
 const TVSeries = lazy(() => import("./features/tv-series/TVSeries"));
 const Bookmarks = lazy(() => import("./features/bookmarks/Bookmarks"));
 

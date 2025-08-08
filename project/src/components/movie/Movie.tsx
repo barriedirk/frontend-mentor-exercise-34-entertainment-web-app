@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import styles from "./Movie.module.css";
 
-import { type MediaType, type MediaItem } from "@/types/media";
+import { type MediaType, type MediaItem } from "@/models/media";
 
 import Icon from "@/components/Icon";
 

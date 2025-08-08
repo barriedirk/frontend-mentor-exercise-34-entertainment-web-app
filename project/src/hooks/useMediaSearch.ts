@@ -1,8 +1,6 @@
-// hooks/useMediaSearch.ts
-
 import { useSignal, useComputed } from "@preact/signals-react";
 import { useDebouncedSignal } from "./useDebouncedSignal";
-import type { MediaItem } from "@/types/media";
+import type { MediaItem } from "@/models/media";
 
 export function useMediaSearch(items: MediaItem[]) {
   const searchTerm = useSignal("");

@@ -1,6 +1,7 @@
 export type MediaType = "trending" | "regular";
 
 export interface MediaInfo {
+  id: number;
   title: string;
   year: number;
   category: "Movie" | "TV Series";

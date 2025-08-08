@@ -1,0 +1,113 @@
+import { useEffect, useState } from "react";
+import { useSignals } from "@preact/signals-react/runtime";
+
+import MovieSection from "@/components/movie/MovieSection";
+import Search from "@/components/forms/search/Search";
+
+import { useMediaSearch } from "@/hooks/useMediaSearch";
+
+import type { MediaItem } from "@/models/media";
+
+import { fetchRecommendedMedia, fetchTrendingMedia } from "@/api/tmdb";
+
+export default function Home() {
+  useSignals();
+
+  const [trendingItems, setTrendingItems] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [page, setPage] = useState(1);
+  const [recommendedItems, setRecommendedItems] = useState<MediaItem[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  async function loadRecommended(pageToLoad: number) {
+    setLoading(true);
+    try {
+      const { items, hasMore } = await fetchRecommendedMedia(pageToLoad);
+
+      setRecommendedItems((prev) => [...prev, ...items]);
+      setPage(pageToLoad);
+      setHasMore(hasMore);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadRecommended(page);
+  }, []);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const trending = await fetchTrendingMedia();
+
+        setTrendingItems(trending);
+      } catch (err: any) {
+        setError(err.message || "Failed to load data.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
+
+  const { searchTerm, debouncedSearchTerm, filteredItems } =
+    useMediaSearch(recommendedItems);
+
+  if (loading) {
+    return (
+      <section className="mt-[24px] mx-[16px]">
+        <p className="text-white">Loading trending movies...</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="mt-[24px] mx-[16px]">
+        <p className="text-red-500">Error: {error}</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="mt-[24px] mx-[16px]">
+      <Search
+        placeholder="Search for movies or TV Series"
+        searchTerm={searchTerm}
+      />
+      {debouncedSearchTerm.value.length === 0 && (
+        <MovieSection
+          title="Trending"
+          items={trendingItems}
+          sectionType="trending"
+          ariaLabel="Trending"
+        />
+      )}
+      <MovieSection
+        title={
+          debouncedSearchTerm.value.length === 0
+            ? "Recommended for you"
+            : filteredItems.value.length === 0
+              ? "No movies or TV Series found"
+              : `Found ${filteredItems.value.length} result${
+                  filteredItems.value.length > 1 ? "s" : ""
+                } for '${debouncedSearchTerm.value}'`
+        }
+        items={filteredItems.value}
+        sectionType="regular"
+        ariaLabel="Movie or TV Series list"
+        isPaginated
+        onLoadMore={() => loadRecommended(page + 1)}
+        hasMore={hasMore}
+        loading={loading}
+      />
+    </section>
+  );
+}
