@@ -12,6 +12,7 @@ export const useApi = <T, P>(
   apiCall: (param: P) => UseApiCall<T>,
   options?: UseApiOptions<P>
 ): UseApiResult<T, P> => {
+  const [autoFetched, setAutoFetched] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Data<T>>(null);
   const [error, setError] = useState<CustomError>(null);
@@ -38,10 +39,12 @@ export const useApi = <T, P>(
   );
 
   useEffect(() => {
-    if (options?.autoFetch) {
+    if (options?.autoFetch && !autoFetched) {
+      setAutoFetched(true);
+
       return fetch(options.params);
     }
-  }, [fetch, options?.autoFetch, options?.params]);
+  }, [fetch, options?.autoFetch, options?.params, autoFetched]);
 
   return { loading, data, error, fetch };
 };

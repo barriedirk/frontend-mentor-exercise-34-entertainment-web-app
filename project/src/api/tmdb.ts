@@ -83,18 +83,27 @@ export interface FetchRecommendedMediaResponse {
   totalPages: number;
 }
 
-export function fetchRecommendedMedia(
-  page = 1
-): UseApiCall<FetchRecommendedMediaResponse> {
+export function fetchRecommendedMedia([page = 1, searchText = ""]: [
+  number,
+  string,
+]): UseApiCall<FetchRecommendedMediaResponse> {
   const controller = loadAbort();
+
+  const endpointMovies = searchText
+    ? `3/search/movie?query=${encodeURIComponent(searchText)}&page=${page}`
+    : `3/movie/popular?page=${page}`;
+
+  const endpointTV = searchText
+    ? `3/search/tv?query=${encodeURIComponent(searchText)}&page=${page}`
+    : `3/tv/popular?page=${page}`;
 
   const call = Promise.all([
     fetchData<{ results: TMDBMovieItem[]; total_pages: number }>(
-      `3/movie/popular?page=${page}`,
+      endpointMovies,
       controller
     ),
     fetchData<{ results: TMDBTVSerieItem[]; total_pages: number }>(
-      `3/tv/popular?page=${page}`,
+      endpointTV,
       controller
     ),
   ]).then(([moviesData, tvData]) => {
@@ -118,13 +127,18 @@ export function fetchRecommendedMedia(
   };
 }
 
-export function fetchMoviesMedia(
-  page = 1
-): UseApiCall<FetchRecommendedMediaResponse> {
+export function fetchMoviesMedia([page = 1, searchText = ""]: [
+  number,
+  string,
+]): UseApiCall<FetchRecommendedMediaResponse> {
   const controller = loadAbort();
 
+  const endpointMovies = searchText
+    ? `3/search/movie?query=${encodeURIComponent(searchText)}&page=${page}`
+    : `3/movie/popular?page=${page}`;
+
   const call = fetchData<{ results: TMDBMovieItem[]; total_pages: number }>(
-    `3/movie/popular?page=${page}`,
+    endpointMovies,
     controller
   ).then((moviesData) => {
     const items = moviesData.results
@@ -146,13 +160,18 @@ export function fetchMoviesMedia(
   };
 }
 
-export function fetchTVSeriesMedia(
-  page = 1
-): UseApiCall<FetchRecommendedMediaResponse> {
+export function fetchTVSeriesMedia([page = 1, searchText = ""]: [
+  number,
+  string,
+]): UseApiCall<FetchRecommendedMediaResponse> {
   const controller = loadAbort();
 
+  const endpointTV = searchText
+    ? `3/search/tv?query=${encodeURIComponent(searchText)}&page=${page}`
+    : `3/tv/popular?page=${page}`;
+
   const call = fetchData<{ results: TMDBTVSerieItem[]; total_pages: number }>(
-    `3/tv/popular?page=${page}`,
+    endpointTV,
     controller
   ).then((tvData) => {
     const items = tvData.results

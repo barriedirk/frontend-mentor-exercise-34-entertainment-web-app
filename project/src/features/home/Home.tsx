@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSignals } from "@preact/signals-react/runtime";
 
 import MovieSection from "@/components/movie/MovieSection";
@@ -19,6 +19,7 @@ export default function Home() {
   useSignals();
 
   const [page, setPage] = useState(1);
+
   const {
     loading: trendingLoading,
     error: trendingError,
@@ -27,19 +28,33 @@ export default function Home() {
     autoFetch: true,
     params: 1,
   });
+
+  const [searchText, setSearchText] = useState("");
+
   const {
     loading: recommendedLoading,
     error: recommendedError,
     data: recommendedData,
     fetch: recommendedFetch,
-  } = useApi<FetchRecommendedMediaResponse, number>(fetchRecommendedMedia, {
-    autoFetch: true,
-    params: 1,
-  });
+  } = useApi<FetchRecommendedMediaResponse, [number, string]>(
+    fetchRecommendedMedia,
+    {
+      autoFetch: true,
+      params: [1, searchText],
+    }
+  );
 
   const { searchTerm, debouncedSearchTerm, filteredItems } = useMediaSearch(
     recommendedData?.items ?? []
   );
+
+  useEffect(() => {
+    if (debouncedSearchTerm.value !== searchText) {
+      setSearchText(debouncedSearchTerm.value);
+      setPage(1);
+      recommendedFetch([1, debouncedSearchTerm.value]);
+    }
+  }, [debouncedSearchTerm.value, searchText, recommendedFetch]);
 
   return (
     <section className="mt-[24px] mx-[16px]">
@@ -78,7 +93,7 @@ export default function Home() {
         totalPages={recommendedData?.totalPages ?? 1}
         onPageChange={(newPage) => {
           setPage(newPage);
-          recommendedFetch(newPage);
+          recommendedFetch([newPage, debouncedSearchTerm.value]);
         }}
         loading={recommendedLoading}
         loadingMessage="Loading movies and TV Series recommended ..."
