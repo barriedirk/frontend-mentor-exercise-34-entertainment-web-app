@@ -12,19 +12,12 @@ import Search from "@/components/forms/search/Search";
 import type { MediaItem } from "@/models/media";
 import mediaData from "@/data/data.json";
 
-export default function Home() {
+export default function Mockup() {
   useSignals();
 
   const items = mediaData as MediaItem[];
   const searchTerm = useSignal<string>("");
   const debouncedSearchTerm = useDebouncedSignal(searchTerm, 500);
-
-  // useEffect(() => {}, []);
-  // const searchValue = useComputed(() => {
-  //   console.log("useComputed", searchTerm.value);
-
-  //   return searchTerm.value;
-  // });
 
   useSignalEffect(() => {
     console.log("Home", searchTerm.value);
