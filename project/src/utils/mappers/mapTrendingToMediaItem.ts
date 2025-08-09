@@ -1,7 +1,7 @@
 import type { MediaItem } from "@/models/media";
-import type { TMDBItem } from "@/models/TMDBItem";
+import type { TMDBTrendingItem } from "@/models/TMDBTrendingItem";
 
-export function mapTMDBToMediaItem(item: TMDBItem): MediaItem {
+export function mapTrendingToMediaItem(item: TMDBTrendingItem): MediaItem {
   const id = item.id;
   const title = item.title || item.name || "Untitled";
   const year = item.release_date || item.first_air_date || "0000";

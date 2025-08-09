@@ -1,4 +1,4 @@
-export type TMDBItem = {
+export type TMDBTrendingItem = {
   id: number;
   media_type: "movie" | "tv";
   title?: string;

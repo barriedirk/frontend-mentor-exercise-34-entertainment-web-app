@@ -1,23 +1,38 @@
+import { useState } from "react";
+
 import { useSignals } from "@preact/signals-react/runtime";
 
-import mediaData from "@/data/data.json";
 import MovieSection from "@/components/movie/MovieSection";
 import Search from "@/components/forms/search/Search";
 import { useMediaSearch } from "@/hooks/useMediaSearch";
-import type { MediaItem } from "@/models/media";
+
+import {
+  fetchTVSeriesMedia,
+  type FetchRecommendedMediaResponse,
+} from "@/api/tmdb";
+
+import { useApi } from "@/hooks/useApi";
 
 export default function Movies() {
   useSignals();
 
-  const allItems = mediaData as MediaItem[];
-  const movieItems = allItems.filter((item) => item.category === "TV Series");
+  const [page, setPage] = useState(1);
+  const { loading, error, data, fetch } = useApi<
+    FetchRecommendedMediaResponse,
+    number
+  >(fetchTVSeriesMedia, {
+    autoFetch: true,
+    params: 1,
+  });
 
-  const { searchTerm, debouncedSearchTerm, filteredItems } =
-    useMediaSearch(movieItems);
+  const { searchTerm, debouncedSearchTerm, filteredItems } = useMediaSearch(
+    data?.items ?? []
+  );
 
   return (
     <section className="mt-[24px] mx-[16px]">
       <Search placeholder="Search for TV Series" searchTerm={searchTerm} />
+
       <MovieSection
         title={
           debouncedSearchTerm.value.length === 0
@@ -30,7 +45,18 @@ export default function Movies() {
         }
         items={filteredItems.value}
         sectionType="regular"
-        ariaLabel="Movie list"
+        ariaLabel="TV Series list"
+        isPaginated
+        currentPage={page}
+        totalPages={data?.totalPages ?? 1}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+          fetch(newPage);
+        }}
+        loading={loading}
+        loadingMessage="Loading TV Series ..."
+        error={!!error}
+        errorMessage={`TV Series Error: ${error}`}
       />
     </section>
   );

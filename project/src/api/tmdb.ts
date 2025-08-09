@@ -1,13 +1,21 @@
 import type { MediaItem } from "@/models/media";
+import { type CacheEntry } from "@/models/cacheEntry";
+
 const BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const cache = new Map<string, { data: any; expiresAt: number }>();
+const cache = new Map<string, CacheEntry<unknown>>();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 import { loadAbort } from "@/utils/loadAbort";
 
-import { type TMDBItem } from "@/models/TMDBItem";
-import { mapTMDBToMediaItem } from "@/utils/mappers/mapTMDBToMediaItem";
+import { type TMDBTrendingItem } from "@/models/TMDBTrendingItem";
+import { type TMDBTVSerieItem } from "@/models/TMDBTVSerieItem";
+import { type TMDBMovieItem } from "@/models/TMDBMovieItem";
+
+import { mapTrendingToMediaItem } from "@/utils/mappers/mapTrendingToMediaItem";
+import { mapMovieToMediaItem } from "@/utils/mappers/mapMovieToMediaItem";
+import { mapTVToMediaItem } from "@/utils/mappers/mapTVToMediaItem";
+
 import type { UseApiCall } from "@/models/useApiCall";
 
 async function fetchData<T>(
@@ -24,7 +32,7 @@ async function fetchData<T>(
   const cached = cache.get(cacheKey);
 
   if (cached && now < cached.expiresAt) {
-    return cached.data;
+    return cached.data as T;
   }
 
   const method = options.method || "GET";
@@ -61,10 +69,10 @@ export function fetchTrendingMedia(): UseApiCall<MediaItem[]> {
   const controller = loadAbort();
 
   return {
-    call: fetchData<{ results: TMDBItem[] }>(
+    call: fetchData<{ results: TMDBTrendingItem[] }>(
       "3/trending/all/day",
       controller
-    ).then((data) => data.results.map(mapTMDBToMediaItem)),
+    ).then((data) => data.results.map(mapTrendingToMediaItem)),
     controller,
   };
 }
@@ -81,18 +89,19 @@ export function fetchRecommendedMedia(
   const controller = loadAbort();
 
   const call = Promise.all([
-    fetchData<{ results: TMDBItem[]; total_pages: number }>(
+    fetchData<{ results: TMDBMovieItem[]; total_pages: number }>(
       `3/movie/popular?page=${page}`,
       controller
     ),
-    fetchData<{ results: TMDBItem[]; total_pages: number }>(
+    fetchData<{ results: TMDBTVSerieItem[]; total_pages: number }>(
       `3/tv/popular?page=${page}`,
       controller
     ),
   ]).then(([moviesData, tvData]) => {
-    const items = [...moviesData.results, ...tvData.results]
-      .map(mapTMDBToMediaItem)
-      .sort((a, b) => a.title.localeCompare(b.title));
+    const items = [
+      ...moviesData.results.map(mapMovieToMediaItem),
+      ...tvData.results.map(mapTVToMediaItem),
+    ].sort((a, b) => a.title.localeCompare(b.title));
 
     const hasMore = page < Math.min(moviesData.total_pages, tvData.total_pages);
 
@@ -100,6 +109,62 @@ export function fetchRecommendedMedia(
       items,
       hasMore,
       totalPages: Math.min(moviesData.total_pages, tvData.total_pages),
+    };
+  });
+
+  return {
+    call,
+    controller,
+  };
+}
+
+export function fetchMoviesMedia(
+  page = 1
+): UseApiCall<FetchRecommendedMediaResponse> {
+  const controller = loadAbort();
+
+  const call = fetchData<{ results: TMDBMovieItem[]; total_pages: number }>(
+    `3/movie/popular?page=${page}`,
+    controller
+  ).then((moviesData) => {
+    const items = moviesData.results
+      .map(mapMovieToMediaItem)
+      .sort((a, b) => a.title.localeCompare(b.title));
+
+    const hasMore = page < moviesData.total_pages;
+
+    return {
+      items,
+      hasMore,
+      totalPages: moviesData.total_pages,
+    };
+  });
+
+  return {
+    call,
+    controller,
+  };
+}
+
+export function fetchTVSeriesMedia(
+  page = 1
+): UseApiCall<FetchRecommendedMediaResponse> {
+  const controller = loadAbort();
+
+  const call = fetchData<{ results: TMDBTVSerieItem[]; total_pages: number }>(
+    `3/tv/popular?page=${page}`,
+    controller
+  ).then((tvData) => {
+    const items = tvData.results
+      .map(mapTVToMediaItem)
+      .sort((a, b) => a.title.localeCompare(b.title));
+
+    const hasMore = page < tvData.total_pages;
+
+    return {
+      items,
+      hasMore,
+      totalPages: tvData.total_pages,
     };
   });
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSignals } from "@preact/signals-react/runtime";
 
 import MovieSection from "@/components/movie/MovieSection";
@@ -19,7 +19,6 @@ export default function Home() {
   useSignals();
 
   const [page, setPage] = useState(1);
-
   const {
     loading: trendingLoading,
     error: trendingError,
@@ -28,7 +27,6 @@ export default function Home() {
     autoFetch: true,
     params: 1,
   });
-
   const {
     loading: recommendedLoading,
     error: recommendedError,
@@ -49,35 +47,19 @@ export default function Home() {
         placeholder="Search for movies or TV Series"
         searchTerm={searchTerm}
       />
-      {trendingLoading && (
-        <p className="text-white-custom text-preset-3">Loading trending ...</p>
+      {debouncedSearchTerm.value.length === 0 && (
+        <MovieSection
+          title="Trending"
+          items={(trendingItems as MediaItem[]) || []}
+          sectionType="trending"
+          ariaLabel="Trending"
+          loading={trendingLoading}
+          loadingMessage="Loading trending ..."
+          error={!!trendingError}
+          errorMessage={`Loading Error Trending: ${trendingError}`}
+        />
       )}
-      {!trendingLoading && !!trendingError && (
-        <p className="text-red-500 text-preset-3">
-          Loading Error Trending: {String(trendingError)}
-        </p>
-      )}
-      {!trendingLoading &&
-        !trendingError &&
-        debouncedSearchTerm.value.length === 0 && (
-          <MovieSection
-            title="Trending"
-            items={(trendingItems as MediaItem[]) || []}
-            sectionType="trending"
-            ariaLabel="Trending"
-          />
-        )}
 
-      {recommendedLoading && (
-        <p className="text-white-custom text-preset-3">
-          Loading movies and TV Series recommended ...
-        </p>
-      )}
-      {!recommendedLoading && !!recommendedError && (
-        <p className="text-red-500 text-preset-3">
-          Movies and TV Series Error: {String(recommendedError)}
-        </p>
-      )}
       <MovieSection
         title={
           debouncedSearchTerm.value.length === 0
@@ -92,12 +74,16 @@ export default function Home() {
         sectionType="regular"
         ariaLabel="Movie or TV Series list"
         isPaginated
-        onLoadMore={() => {
-          setPage((page) => page + 1);
-          recommendedFetch(page + 1);
+        currentPage={page}
+        totalPages={recommendedData?.totalPages ?? 1}
+        onPageChange={(newPage) => {
+          setPage(newPage);
+          recommendedFetch(newPage);
         }}
-        hasMore={recommendedData?.hasMore}
         loading={recommendedLoading}
+        loadingMessage="Loading movies and TV Series recommended ..."
+        error={!!recommendedError}
+        errorMessage={`Movies and TV Series Error: ${recommendedError}`}
       />
     </section>
   );

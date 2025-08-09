@@ -1,10 +1,12 @@
 export type MediaType = "trending" | "regular";
 
+export type CategoryType = "Movie" | "TV Series";
+
 export interface MediaInfo {
   id: number;
   title: string;
   year: number;
-  category: "Movie" | "TV Series";
+  category: CategoryType;
   rating: string;
   isBookmarked: boolean;
   isTrending: boolean;
