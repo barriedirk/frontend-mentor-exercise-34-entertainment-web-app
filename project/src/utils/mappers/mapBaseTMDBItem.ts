@@ -12,8 +12,12 @@ export function mapBaseTMDBItem(
   posterPath: string | null,
   backdropPath: string | null
 ): MediaItem {
-  const poster = posterPath ? `${posterBase}${posterPath}` : "";
-  const backdrop = backdropPath ? `${backdropBase}${backdropPath}` : "";
+  const poster = posterPath
+    ? `${posterBase}${posterPath}`
+    : "/assets/placeholder.svg";
+  const backdrop = backdropPath
+    ? `${backdropBase}${backdropPath}`
+    : "/assets/placeholder.svg";
 
   return {
     id,

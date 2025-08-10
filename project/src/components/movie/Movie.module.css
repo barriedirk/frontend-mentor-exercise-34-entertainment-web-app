@@ -11,10 +11,23 @@
   }
 }
 
+.movie__image {
+  opacity: 0;
+  filter: blur(10px);
+  transition:
+    opacity 0.5s ease-in-out,
+    filter 2s ease-in-out;
+}
+
+.movie__image--loaded {
+  opacity: 1;
+  filter: blur(0);
+}
+
 .movie__image--trending,
 .movie__image--regular,
 .movie__image--poster {
-  object-fit: cover;
+  object-fit: content;
 }
 
 .movie__image--trending {

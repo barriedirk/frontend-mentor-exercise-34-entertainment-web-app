@@ -1,11 +1,6 @@
 import type { MediaItem } from "@/models/media";
 import { type CacheEntry } from "@/models/cacheEntry";
 
-const BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const cache = new Map<string, CacheEntry<unknown>>();
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
-
 import { loadAbort } from "@/utils/loadAbort";
 
 import { type TMDBTrendingItem } from "@/models/TMDBTrendingItem";
@@ -15,8 +10,15 @@ import { type TMDBMovieItem } from "@/models/TMDBMovieItem";
 import { mapTrendingToMediaItem } from "@/utils/mappers/mapTrendingToMediaItem";
 import { mapMovieToMediaItem } from "@/utils/mappers/mapMovieToMediaItem";
 import { mapTVToMediaItem } from "@/utils/mappers/mapTVToMediaItem";
+import { mapTMDBTrailer } from "@/utils/mappers/mapTMDBTrailer";
 
 import type { UseApiCall } from "@/models/useApiCall";
+import type { TMDBTrailer, TMDBTrailerItem } from "@/models/TMDBTrailer";
+
+const BASE_URL = "https://api.themoviedb.org/3";
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const cache = new Map<string, CacheEntry<unknown>>();
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 async function fetchData<T>(
   endpoint: string,
@@ -75,6 +77,10 @@ export function fetchTrendingMedia(): UseApiCall<MediaItem[]> {
     ).then((data) => data.results.map(mapTrendingToMediaItem)),
     controller,
   };
+}
+
+export interface FetchTrailerResponse {
+  key: string | null;
 }
 
 export interface FetchRecommendedMediaResponse {
@@ -186,6 +192,33 @@ export function fetchTVSeriesMedia([page = 1, searchText = ""]: [
       totalPages: tvData.total_pages,
     };
   });
+
+  return {
+    call,
+    controller,
+  };
+}
+
+export function fetchTrailerMedia([id = 0, mediaType = "tv"]: [
+  id: number,
+  mediaType: "movie" | "tv",
+]): UseApiCall<FetchTrailerResponse> {
+  const controller = loadAbort();
+
+  const endpointTrailer = `3/${mediaType}/${id}/videos`;
+
+  const call = fetchData<TMDBTrailer>(endpointTrailer, controller).then(
+    (data) => {
+      const trailer = mapTMDBTrailer(data).results.find(
+        (v: TMDBTrailerItem) =>
+          v.type === "Trailer" && v.site === "YouTube" && v.key
+      );
+
+      return {
+        key: trailer?.key ?? null,
+      };
+    }
+  );
 
   return {
     call,

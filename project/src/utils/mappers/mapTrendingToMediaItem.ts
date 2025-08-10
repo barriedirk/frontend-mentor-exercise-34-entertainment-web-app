@@ -10,10 +10,12 @@ export function mapTrendingToMediaItem(item: TMDBTrendingItem): MediaItem {
   const posterBase = "https://image.tmdb.org/t/p/w500";
   const backdropBase = "https://image.tmdb.org/t/p/original";
 
-  const poster = item.poster_path ? `${posterBase}${item.poster_path}` : "";
+  const poster = item.poster_path
+    ? `${posterBase}${item.poster_path}`
+    : "/assets/placeholder.svg";
   const backdrop = item.backdrop_path
     ? `${backdropBase}${item.backdrop_path}`
-    : "";
+    : "/assets/placeholder.svg";
 
   return {
     id,

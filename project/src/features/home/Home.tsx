@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSignals } from "@preact/signals-react/runtime";
 
 import MovieSection from "@/components/movie/MovieSection";
@@ -18,6 +18,9 @@ import { useApi } from "@/hooks/useApi";
 export default function Home() {
   useSignals();
 
+  const topRef = useRef<HTMLDivElement | null>(null);
+
+  const [shouldScroll, setShouldScroll] = useState(false);
   const [page, setPage] = useState(1);
 
   const {
@@ -57,7 +60,19 @@ export default function Home() {
       setPage(1);
       recommendedFetch([1, debouncedSearchTerm.value]);
     }
-  }, [debouncedSearchTerm.value, searchText, recommendedFetch]);
+  }, [
+    debouncedSearchTerm.value,
+    searchText,
+    recommendedFetch,
+    recommendedController,
+  ]);
+
+  useEffect(() => {
+    if (shouldScroll && topRef.current) {
+      topRef.current.scrollIntoView({ behavior: "smooth" });
+      setShouldScroll(false);
+    }
+  }, [shouldScroll, filteredItems]);
 
   const recommendedTitle = (): string => {
     if (recommendedLoading) return "";
@@ -92,6 +107,7 @@ export default function Home() {
       )}
 
       <MovieSection
+        ref={topRef}
         title={recommendedTitle()}
         items={filteredItems}
         sectionType="poster"
@@ -102,6 +118,7 @@ export default function Home() {
         onPageChange={(newPage) => {
           setPage(newPage);
           recommendedFetch([newPage, debouncedSearchTerm.value]);
+          setShouldScroll(true);
         }}
         loading={recommendedLoading}
         loadingMessage="Loading movies and TV Series recommended ..."
