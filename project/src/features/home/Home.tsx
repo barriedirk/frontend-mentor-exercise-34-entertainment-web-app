@@ -36,6 +36,7 @@ export default function Home() {
     error: recommendedError,
     data: recommendedData,
     fetch: recommendedFetch,
+    controller: recommendedController,
   } = useApi<FetchRecommendedMediaResponse, [number, string]>(
     fetchRecommendedMedia,
     {
@@ -50,11 +51,26 @@ export default function Home() {
 
   useEffect(() => {
     if (debouncedSearchTerm.value !== searchText) {
+      if (recommendedController) recommendedController.abort();
+
       setSearchText(debouncedSearchTerm.value);
       setPage(1);
       recommendedFetch([1, debouncedSearchTerm.value]);
     }
   }, [debouncedSearchTerm.value, searchText, recommendedFetch]);
+
+  const recommendedTitle = (): string => {
+    if (recommendedLoading) return "";
+
+    if (filteredItems.length === 0) return "No movies or TV Series found";
+
+    if (filteredItems.length > 0 && debouncedSearchTerm.value.length > 0)
+      return `Found ${recommendedData?.totalPages} page${
+        recommendedData?.totalPages || 1 > 1 ? "s" : ""
+      } for '${debouncedSearchTerm.value}'`;
+
+    return "Recommended for you";
+  };
 
   return (
     <section className="mt-[24px] mx-[16px]">
@@ -76,17 +92,9 @@ export default function Home() {
       )}
 
       <MovieSection
-        title={
-          debouncedSearchTerm.value.length === 0
-            ? "Recommended for you"
-            : filteredItems.value.length === 0
-              ? "No movies or TV Series found"
-              : `Found ${filteredItems.value.length} result${
-                  filteredItems.value.length > 1 ? "s" : ""
-                } for '${debouncedSearchTerm.value}'`
-        }
-        items={filteredItems.value}
-        sectionType="regular"
+        title={recommendedTitle()}
+        items={filteredItems}
+        sectionType="poster"
         ariaLabel="Movie or TV Series list"
         isPaginated
         currentPage={page}

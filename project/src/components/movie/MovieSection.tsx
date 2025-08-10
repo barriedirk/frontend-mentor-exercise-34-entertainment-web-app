@@ -1,12 +1,14 @@
 import clsx from "clsx";
 
+import styles from "./MovieSection.module.css";
+
 import Movie from "@/components/movie/Movie";
 import type { MediaItem } from "@/models/media";
 
 interface MovieSectionProps {
   title: string;
   items: MediaItem[];
-  sectionType: "trending" | "regular";
+  sectionType: "trending" | "regular" | "poster";
   ariaLabel: string;
   showWhenEmpty?: boolean;
   emptyMessage?: string;
@@ -62,7 +64,7 @@ export default function MovieSection({
   };
 
   return (
-    <div className="my-6">
+    <div className="media-section my-6">
       <h2 className="my-[24px] text-white-custom text-preset-1-mobile lg:text-preset-1">
         {title}
       </h2>
@@ -94,9 +96,14 @@ export default function MovieSection({
       </section>
 
       {isPaginated && !hasMore && totalPages > 1 && !loading && (
-        <div className="mt-6 flex justify-center items-center gap-2 flex-wrap text-white-custom">
+        <div
+          className={clsx(
+            styles["media-section--pagination"],
+            "mt-6 text-white-custom flex justify-center items-center gap-5"
+          )}
+        >
           <button
-            className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
+            className="px-4 py-3 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50 text-preset-3-mobile md:text-preset-3"
             disabled={currentPage === 1}
             onClick={() => onPageChange(currentPage - 1)}
           >
@@ -107,7 +114,8 @@ export default function MovieSection({
             <button
               key={page}
               className={clsx(
-                "px-3 py-1 rounded",
+                styles["media-section--page"],
+                "px-4 py-3 text-preset-5-mobile md:text-preset-3",
                 page === currentPage
                   ? "bg-white text-black"
                   : "bg-gray-700 hover:bg-gray-600"
@@ -119,7 +127,7 @@ export default function MovieSection({
           ))}
 
           <button
-            className="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
+            className="px-4 py-3 rounded bg-gray-700 hover:bg-gray-600 disabled:opacity-50 text-preset-3-mobile md:text-preset-3"
             disabled={currentPage === totalPages}
             onClick={() => onPageChange(currentPage + 1)}
           >

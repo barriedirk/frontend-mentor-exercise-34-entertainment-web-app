@@ -1,0 +1,13 @@
+.media-section {
+}
+
+.media-section--pagination {
+}
+
+.media-section--page {
+  display: none;
+
+  @media screen and (min-width: 37em) {
+    display: initial;
+  }
+}

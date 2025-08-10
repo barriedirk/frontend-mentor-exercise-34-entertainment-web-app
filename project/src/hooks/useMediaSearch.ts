@@ -20,6 +20,6 @@ export function useMediaSearch(items: MediaItem[]) {
   return {
     searchTerm,
     debouncedSearchTerm,
-    filteredItems: { value: filteredItems },
+    filteredItems,
   };
 }

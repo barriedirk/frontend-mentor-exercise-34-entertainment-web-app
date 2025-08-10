@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type {
   CustomError,
@@ -17,9 +17,18 @@ export const useApi = <T, P>(
   const [data, setData] = useState<Data<T>>(null);
   const [error, setError] = useState<CustomError>(null);
 
+  const currentControllerRef = useRef<AbortController | null>(null);
+
   const fetch = useCallback(
     (param: P) => {
+      if (currentControllerRef.current) {
+        currentControllerRef.current.abort();
+      }
+
       const { call, controller } = apiCall(param);
+
+      currentControllerRef.current = controller;
+
       setLoading(true);
 
       call
@@ -28,23 +37,40 @@ export const useApi = <T, P>(
           setError(null);
         })
         .catch((err) => {
-          setError(err);
+          if (err.name !== "AbortError") {
+            setError(err);
+          }
         })
         .finally(() => {
           setLoading(false);
         });
-      return () => controller.abort();
+
+      // return () => controller.abort();
     },
     [apiCall]
   );
 
   useEffect(() => {
     if (options?.autoFetch && !autoFetched) {
+      if (currentControllerRef.current) currentControllerRef.current.abort();
+
       setAutoFetched(true);
 
       return fetch(options.params);
     }
+
+    return () => {
+      if (currentControllerRef.current) {
+        // currentControllerRef.current.abort();
+      }
+    };
   }, [fetch, options?.autoFetch, options?.params, autoFetched]);
 
-  return { loading, data, error, fetch };
+  return {
+    loading,
+    data,
+    error,
+    fetch,
+    controller: currentControllerRef.current,
+  };
 };

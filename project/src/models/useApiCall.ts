@@ -6,6 +6,7 @@ export interface UseApiResult<T, P> {
   data: Data<T>;
   error: CustomError;
   fetch: (param: P) => void;
+  controller?: AbortController | null;
 }
 
 export type UseApiOptions<P> = {

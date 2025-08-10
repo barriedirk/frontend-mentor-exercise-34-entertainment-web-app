@@ -15,6 +15,8 @@ interface MovieProps {
 
 export default function Movie({ type, item }: MovieProps) {
   const isRegular = type === "regular";
+  const isTrending = type === "trending";
+  const isPoster = type === "poster";
   const { title, year, category, rating, thumbnail, isBookmarked } = item;
   const isMovie = category === "Movie";
 
@@ -31,24 +33,12 @@ export default function Movie({ type, item }: MovieProps) {
       tabIndex={0}
       className={clsx(
         styles["movie"],
-        isRegular ? styles["movie--regular"] : styles["movie--trending"]
+        isRegular && styles["movie--regular"],
+        isTrending && styles["movie--trending"],
+        isPoster && styles["movie--poster"]
       )}
     >
-      {isRegular && (
-        <picture className={styles["movie__picture"]}>
-          <source media="(min-width:1000px)" srcSet={thumbnail.regular.large} />
-          <source media="(min-width:500px)" srcSet={thumbnail.regular.medium} />
-          <img
-            className={clsx(
-              styles["movie__image--regular"],
-              "movie__image radius-8px"
-            )}
-            src={thumbnail.regular.small}
-            alt={`Thumbnail for ${title} (${category}, ${year})`}
-          />
-        </picture>
-      )}
-      {!isRegular && (
+      {isTrending && (
         <picture className={styles["movie__picture"]}>
           <source
             media="(min-width:1000px)"
@@ -65,13 +55,29 @@ export default function Movie({ type, item }: MovieProps) {
         </picture>
       )}
 
+      {(isRegular || isPoster) && (
+        <picture className={styles["movie__picture"]}>
+          <source media="(min-width:1000px)" srcSet={thumbnail.regular.large} />
+          <source media="(min-width:500px)" srcSet={thumbnail.regular.medium} />
+          <img
+            className={clsx(
+              isRegular && styles["movie__image--regular"],
+              isPoster && styles["movie__image--poster"],
+              "movie__image radius-8px"
+            )}
+            src={thumbnail.regular.small}
+            alt={`Thumbnail for ${title} (${category}, ${year})`}
+          />
+        </picture>
+      )}
+
       <figcaption className={clsx("movie__caption flex gap-2 flex-col")}>
         <p
           className={clsx(
             "flex justify-start items-center gap-2 text-white-75-custom",
-            isRegular
-              ? "text-preset-6-mobile md:text-preset-5"
-              : "text-preset-5-mobile md:text-preset-4"
+            isTrending
+              ? "text-preset-5-mobile md:text-preset-4"
+              : "text-preset-6-mobile md:text-preset-5"
           )}
         >
           {year} •
@@ -85,9 +91,9 @@ export default function Movie({ type, item }: MovieProps) {
         <h3
           className={clsx(
             "text-white-custom",
-            isRegular
-              ? "text-preset-4-mobile md:text-preset-5"
-              : "text-preset-3-mobile md:text-preset-3"
+            isTrending
+              ? "text-preset-3-mobile md:text-preset-3"
+              : "text-preset-4-mobile md:text-preset-5"
           )}
         >
           {title}

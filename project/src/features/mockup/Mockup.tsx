@@ -20,7 +20,7 @@ export default function Mockup() {
   const debouncedSearchTerm = useDebouncedSignal(searchTerm, 500);
 
   useSignalEffect(() => {
-    console.log("Home", searchTerm.value);
+    console.log("Mockup", searchTerm.value);
   });
 
   const trendingItems = useComputed(() =>

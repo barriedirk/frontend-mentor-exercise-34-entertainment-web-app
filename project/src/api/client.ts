@@ -9,8 +9,6 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const url = new URL(endpoint, BASE_URL);
 
-  console.log("API Key:", API_KEY);
-
   url.searchParams.set("api_key", API_KEY);
 
   const cacheKey = url.toString();

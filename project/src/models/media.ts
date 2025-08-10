@@ -1,4 +1,4 @@
-export type MediaType = "trending" | "regular";
+export type MediaType = "trending" | "regular" | "poster";
 
 export type CategoryType = "Movie" | "TV Series";
 
