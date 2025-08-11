@@ -23,12 +23,12 @@ export default function Modal({ children, onClose }: ModalProps) {
   return (
     <div
       className={clsx(
-        "fixed inset-0 z-50 bg-black bg-opacity-75 flex items-center justify-center p-4"
+        "fixed inset-0 z-50 bg-white-custom-30 flex items-center justify-center p-4"
       )}
       onClick={onClose}
     >
       <div
-        className="bg-black-custom rounded-lg p-4 max-w-[90%] max-h-[90%] relative"
+        className="bg-black-custom rounded-lg p-4 min-w-[60%] max-w-[90%] max-h-[90%] relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button

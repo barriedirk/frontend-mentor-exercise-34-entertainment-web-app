@@ -30,6 +30,10 @@
   background-color: var(--clr-white);
 }
 
+@utility bg-white-custom-30 {
+  background-color: var(--clr-white-30);
+}
+
 @utility bg-black-custom {
   background-color: var(--clr-black);
 }

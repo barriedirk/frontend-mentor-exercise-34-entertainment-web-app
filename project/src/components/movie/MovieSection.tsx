@@ -93,7 +93,7 @@ const MovieSection = forwardRef<HTMLDivElement, MovieSectionProps>(
           ) : (
             items.map((item) => (
               <Movie
-                key={item.title ?? item.title}
+                key={`${item.category}-${item.id ?? ""}-${item.title}`}
                 item={item}
                 type={sectionType}
               />

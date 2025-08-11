@@ -1,13 +1,9 @@
 import { combineReducers } from "redux";
 
-import cellsReducer from "./cellsReducer";
-import bundlesReducer from "./bundlesReducer";
-import notebooksReducer from "./notebooksReducer";
+import bookmarksReducer from "./bookmarksReducer";
 
 const reducers = combineReducers({
-  cells: cellsReducer,
-  blundes: bundlesReducer,
-  notebooks: notebooksReducer,
+  bookmarks: bookmarksReducer,
 });
 
 export default reducers;

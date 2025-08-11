@@ -1,0 +1,148 @@
+.movie {
+  position: relative;
+  scroll-snap-align: start;
+
+  picture {
+    position: relative;
+  }
+
+  .movie__image {
+    width: 100%;
+  }
+}
+
+.movie__image {
+  opacity: 0;
+  filter: blur(10px);
+  transition:
+    opacity 0.5s ease-in-out,
+    filter 2s ease-in-out;
+}
+
+.movie__image--loaded {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.movie__image--trending,
+.movie__image--regular,
+.movie__image--poster {
+  object-fit: content;
+}
+
+.movie__image--trending {
+  aspect-ratio: 240 / 140;
+  height: 140px;
+}
+
+.movie__image--regular {
+  aspect-ratio: 164 / 110;
+}
+
+.movie__image--poster {
+  aspect-ratio: 500 / 750;
+}
+
+.movie--poster,
+.movie--regular {
+  figcaption {
+    margin-top: 20px;
+  }
+}
+
+.movie--regular {
+  .movie__play {
+    aspect-ratio: 164 / 110;
+  }
+}
+
+.movie--poster {
+  .movie__play {
+    aspect-ratio: 500 / 750;
+  }
+}
+
+.movie__btn-play {
+  background-color: var(--clr-white-30);
+}
+
+.movie--trending {
+  picture::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-to-bottom);
+    border-radius: 8px;
+  }
+
+  figcaption {
+    position: absolute;
+    left: 13px;
+    bottom: 13px;
+  }
+
+  .movie__play {
+    aspect-ratio: 240 / 140;
+  }
+}
+
+.movie__bookmark {
+  position: absolute;
+  border-radius: 100%;
+  width: 32px;
+  height: 32px;
+  top: 15px;
+  right: 15px;
+  z-index: 25;
+
+  &::before {
+    content: "";
+    border-radius: 100%;
+    position: absolute;
+    inset: 0;
+    background-color: var(--clr-blue-950);
+    opacity: 0.9;
+    transition: background-color 0.5s ease-in-out;
+  }
+
+  &:hover::before {
+    background-color: var(--clr-white);
+  }
+}
+
+.movie__play {
+  opacity: 0;
+  border-radius: 8px;
+  background-color: var(--clr-black-50);
+  transition: opacity 0.5s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .movie__image--regular {
+    aspect-ratio: 220 / 140;
+  }
+
+  .movie__image--trending {
+    aspect-ratio: 470 / 230;
+    height: 230px;
+  }
+
+  .movie--trending {
+    .movie__play {
+      aspect-ratio: 470 / 230;
+    }
+  }
+
+  .movie--regular {
+    .movie__play {
+      aspect-ratio: 220 / 140;
+    }
+  }
+}

@@ -22,6 +22,7 @@ export default function Home() {
 
   const [shouldScroll, setShouldScroll] = useState(false);
   const [page, setPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
 
   const {
     loading: trendingLoading,
@@ -31,8 +32,6 @@ export default function Home() {
     autoFetch: true,
     params: 1,
   });
-
-  const [searchText, setSearchText] = useState("");
 
   const {
     loading: recommendedLoading,

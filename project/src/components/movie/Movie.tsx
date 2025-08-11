@@ -135,6 +135,7 @@ export default function Movie({ type, item }: MovieProps) {
               srcSet={thumbnail.regular.medium}
             />
             <img
+              loading="lazy"
               className={clsx(
                 styles["movie__image"],
                 isRegular && styles["movie__image--regular"],
@@ -222,7 +223,24 @@ export default function Movie({ type, item }: MovieProps) {
           {!loading && !error && !data?.key && (
             <p className="text-white-custom text-preset-1">No trailer found.</p>
           )}
-          <div className="mt-10 flex gap-2 flex-col">{caption}</div>
+          <div className="mt-[20px] flex gap-5 items-start justify-start">
+            <div>
+              <img
+                loading="lazy"
+                className={clsx(
+                  styles["movie__image"],
+                  isRegular && styles["movie__image--regular"],
+                  isPoster && styles["movie__image--poster"],
+                  "movie__image radius-8px",
+                  isLoaded && styles["movie__image--loaded"]
+                )}
+                style={{ maxHeight: "150px" }}
+                src={thumbnail.regular.small}
+                alt={`Thumbnail for ${title} (${category}, ${year})`}
+              />
+            </div>
+            <div className="flex gap-2 flex-col">{caption}</div>
+          </div>
         </Modal>
       )}
     </>
