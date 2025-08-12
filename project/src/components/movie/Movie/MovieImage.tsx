@@ -7,9 +7,8 @@ import { useMovieContext } from "./MovieContext";
 export default function MovieImage() {
   const { item, type, isLoaded, setIsLoaded } = useMovieContext();
 
-  const isTrending = type === "trending";
   const isRegular = type === "regular";
-
+  const isTrending = type === "trending";
   const isPoster = type === "poster";
 
   const thumbnail = isTrending
@@ -34,7 +33,7 @@ export default function MovieImage() {
         loading="lazy"
         className={clsx(
           styles["movie__image"],
-          "movie__image radius-8px",
+          "radius-8px",
           isTrending && styles["movie__image--trending"],
           isRegular && styles["movie__image--regular"],
           isPoster && styles["movie__image--poster"],

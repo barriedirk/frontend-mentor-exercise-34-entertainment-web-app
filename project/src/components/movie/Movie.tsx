@@ -256,3 +256,10 @@ export default function Movie({ type, item }: MovieProps) {
     </>
   );
 }
+
+// example:
+// <Movie
+//   key={`${item.category}-${item.id ?? ""}-${item.title}`}
+//   item={item}
+//   type={sectionType}
+// />

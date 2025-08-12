@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, type ReactNode, type FC } from "react";
 
 import MovieImage from "./MovieImage";
+import MovieThumbnail from "./MovieThumbnail";
 import MovieCaption from "./MovieCaption";
 import MoviePlayButton from "./MoviePlayButton";
 import MovieBookmark from "./MovieBookmark";
@@ -16,7 +17,7 @@ import type { MovieContextProps } from "./MovieContext";
 
 import styles from "./Movie.module.css";
 import clsx from "clsx";
-import { useFadeInOnView } from "@hooks/useFadeInOnView";
+import { useFadeInOnView } from "@/hooks/useFadeInOnView";
 
 interface MovieProps {
   item: MediaItem;
@@ -30,6 +31,7 @@ interface MovieComponent extends FC<MovieProps> {
   PlayButton: FC;
   Bookmark: FC;
   Modal: FC;
+  Thumbnail: FC;
 }
 
 type ParamType = [number, "movie" | "tv"];
@@ -98,6 +100,7 @@ const Movie: MovieComponent = ({ item, type, children }: MovieProps) => {
 };
 
 Movie.Image = MovieImage;
+Movie.Thumbnail = MovieThumbnail;
 Movie.Caption = MovieCaption;
 Movie.PlayButton = MoviePlayButton;
 Movie.Bookmark = MovieBookmark;

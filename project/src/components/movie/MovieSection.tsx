@@ -1,10 +1,12 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 import clsx from "clsx";
 
 import styles from "./MovieSection.module.css";
 
-import Movie from "@/components/movie/Movie";
+// import Movie from "@/components/movie/Movie";
+import Movie from "@/components/movie/Movie/";
+
 import type { MediaItem } from "@/models/media";
 
 interface MovieSectionProps {
@@ -92,11 +94,21 @@ const MovieSection = forwardRef<HTMLDivElement, MovieSectionProps>(
             </p>
           ) : (
             items.map((item) => (
+              // <Movie
+              //   key={`${item.category}-${item.id ?? ""}-${item.title}`}
+              //   item={item}
+              //   type={sectionType}
+              // />
               <Movie
                 key={`${item.category}-${item.id ?? ""}-${item.title}`}
                 item={item}
                 type={sectionType}
-              />
+              >
+                <Movie.Image />
+                <Movie.Caption />
+                <Movie.PlayButton />
+                <Movie.Bookmark />
+              </Movie>
             ))
           )}
         </section>
