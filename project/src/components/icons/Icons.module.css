@@ -1,0 +1,21 @@
+.icon-bookmark-empty {
+  fill: var(--clr-blue-900);
+  stroke: var(--clr-white);
+  transition: all 0.3 ease;
+
+  &:hover {
+    fill: var(--clr-white);
+    stroke: var(--clr-blue-500);
+  }
+}
+
+.icon-bookmark-full {
+  fill: var(--clr-white);
+  stroke: var(--clr-blue-900);
+  transition: all 0.3 ease;
+
+  &:hover {
+    fill: var(--clr-white);
+    stroke: var(--clr-blue-500);
+  }
+}

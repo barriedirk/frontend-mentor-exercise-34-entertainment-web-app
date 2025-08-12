@@ -2,7 +2,7 @@ import type { MediaItem } from "@/models/media";
 
 export interface BookmarksState {
   list: string[];
-  data: {
-    [id: string]: MediaItem;
-  };
+  data: BookmarksStateData;
 }
+
+export type BookmarksStateData = Record<string, MediaItem>;

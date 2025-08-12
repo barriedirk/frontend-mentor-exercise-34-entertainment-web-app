@@ -2,6 +2,8 @@ export type MediaType = "trending" | "regular" | "poster";
 
 export type CategoryType = "Movie" | "TV Series";
 
+export type ParamType = [number, "movie" | "tv"];
+
 export interface MediaInfo {
   id: number;
   title: string;

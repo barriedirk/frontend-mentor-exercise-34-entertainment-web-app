@@ -1,7 +1,7 @@
 import { ActionType } from "@/state/action-types";
 import { type Dispatch } from "redux";
 
-import localforage from "localforage";
+import localforage from "@/lib/localforage";
 
 import type {
   AddMediaAction,
@@ -13,7 +13,7 @@ import type {
 import type { MediaItem } from "@/models/media";
 import type { RootState } from "@state/reducers";
 
-export const updateBookmark = (id: string, item: MediaItem): AddMediaAction => {
+export const addBookmark = (id: string, item: MediaItem): AddMediaAction => {
   return {
     type: ActionType.ADD_MEDIA,
     payload: {
@@ -42,9 +42,9 @@ export const saveBookmarks = () => {
 
     try {
       localforage
-        .setItem("bookmarks", JSON.stringify(bookmarks))
+        .setItem("bookmarks", bookmarks)
         .then(() => {
-          console.log("Data stored successfully!");
+          console.log("Data stored successfully!", { bookmarks });
         })
         .catch((error) => {
           console.error("Error storing data:", error);

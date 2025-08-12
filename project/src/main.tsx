@@ -1,31 +1,33 @@
 import "@/styles/index.css";
+import "@/lib/localforage";
 
 import { lazy, StrictMode, Suspense } from "react";
-
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
-
 import { Provider } from "react-redux";
-import { store } from "@/state/index";
 
-// import ErrorBoundary from "@components/ErrorBoundary";
+import { configureStore } from "@/state/store";
+import { loadBookmarksState } from "@/state/helpers/loadStateFromLocalStorage";
 
 import Loading from "@/components/splash/Splash";
 
-const App = lazy(async () => {
-  const App = import("./App.tsx");
+const App = lazy(() => import("./App"));
 
-  return App;
-});
+async function init() {
+  const preloadedState = await loadBookmarksState();
+  const store = configureStore(preloadedState);
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <HashRouter>
-        <Suspense fallback={<Loading />}>
-          <App />
-        </Suspense>
-      </HashRouter>
-    </Provider>
-  </StrictMode>
-);
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <Provider store={store}>
+        <HashRouter>
+          <Suspense fallback={<Loading />}>
+            <App />
+          </Suspense>
+        </HashRouter>
+      </Provider>
+    </StrictMode>
+  );
+}
+
+init();

@@ -4,15 +4,17 @@ import clsx from "clsx";
 
 import styles from "./Movie.module.css";
 
-import { type MediaType, type MediaItem } from "@/models/media";
+import type { ParamType, MediaType, MediaItem } from "@/models/media";
 
 import { fetchTrailerMedia, type FetchTrailerResponse } from "@/api/tmdb";
 
 import { useApi } from "@/hooks/useApi";
 import { useFadeInOnView } from "@/hooks/useFadeInOnView";
+import { useActions } from "@/hooks/useActions";
 
 import Icon from "@/components/Icon";
 import Modal from "@/components/modals/Modal";
+import { useIsBookmarkHosted } from "@/hooks/useIsBookmarkHosted";
 
 interface MovieProps {
   type: MediaType;
@@ -21,17 +23,19 @@ interface MovieProps {
   onBookmarkToggle?: (item: MediaItem) => void;
 }
 
-type ParamType = [number, "movie" | "tv"];
-
 export default function Movie({ type, item }: MovieProps) {
   const [showModal, setShowModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useFadeInOnView(100);
+  const { idBookmark, isBookmarkHosted } = useIsBookmarkHosted(item);
+  const { addBookmark, deleteBookmark } = useActions();
+
+  console.log({ idBookmark, isBookmarkHosted });
 
   const isRegular = type === "regular";
   const isTrending = type === "trending";
   const isPoster = type === "poster";
-  const { title, year, category, rating, thumbnail, isBookmarked } = item;
+  const { title, year, category, rating, thumbnail } = item;
   const isMovie = category === "Movie";
 
   const params: ParamType = useMemo(
@@ -88,7 +92,15 @@ export default function Movie({ type, item }: MovieProps) {
   }, [fetch, controller, params]);
 
   const bookmark = () => {
-    console.log(`Bookmark toggled for: ${title}`);
+    console.log(
+      `Bookmark toggled for: ${idBookmark} / ${title} : ${isBookmarkHosted}`
+    );
+
+    if (isBookmarkHosted) {
+      deleteBookmark(idBookmark);
+    } else {
+      addBookmark(idBookmark, item);
+    }
   };
 
   return (
@@ -154,28 +166,26 @@ export default function Movie({ type, item }: MovieProps) {
           {caption}
         </figcaption>
 
-        {!isBookmarked && (
-          <button
-            type="button"
-            aria-label={
-              isBookmarked
-                ? `Remove ${title} from bookmarks`
-                : `Add ${title} to bookmarks`
-            }
+        <button
+          type="button"
+          aria-label={
+            isBookmarkHosted
+              ? `Remove ${title} from bookmarks`
+              : `Add ${title} to bookmarks`
+          }
+          className={clsx(
+            styles["movie__bookmark"],
+            "cursor-pointer flex justify-center items-center"
+          )}
+          onClick={bookmark}
+        >
+          <Icon
             className={clsx(
-              styles["movie__bookmark"],
-              "cursor-pointer flex justify-center items-center"
+              "w-[11px] h-[14px] z-40 text-black-custom hover:text-white-custom"
             )}
-            onClick={bookmark}
-          >
-            <Icon
-              className={clsx(
-                "w-[11px] h-[14px] z-40 text-black-custom hover:text-white-custom"
-              )}
-              name="bookmarkEmpty"
-            />
-          </button>
-        )}
+            name={isBookmarkHosted ? "bookmarkFull" : "bookmarkEmpty"}
+          />
+        </button>
 
         <div
           className={clsx(
