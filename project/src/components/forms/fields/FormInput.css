@@ -24,6 +24,11 @@
   padding: 5px 20px;
   font-size: 15px;
   flex: 1 1 0;
+  outline: none;
+}
+
+.form-group input:focus {
+  outline: 1px solid var(--clr-white-20);
 }
 
 .form-group input::placeholder {

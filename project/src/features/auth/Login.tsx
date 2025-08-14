@@ -1,6 +1,6 @@
 import "./Login.css";
 
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm } from "react-hook-form";
@@ -11,8 +11,11 @@ import {
 } from "@/features/auth/schemas/login";
 
 import InputForm from "@/components/forms/fields/FormInput";
+import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
 
 export default function Login() {
+  const containerRef = useFocusFirstInput<HTMLFormElement>();
+
   const {
     control,
     handleSubmit,
@@ -31,7 +34,11 @@ export default function Login() {
       <h1 id="login-heading" className="text-preset-1 mb-[40px]">
         Login
       </h1>
-      <form onSubmit={handleSubmit(onSubmit)} aria-labelledby="login-heading">
+      <form
+        ref={containerRef}
+        onSubmit={handleSubmit(onSubmit)}
+        aria-labelledby="login-heading"
+      >
         <InputForm<LoginFormValues>
           name="email"
           control={control}
@@ -49,7 +56,7 @@ export default function Login() {
           autoComplete="password"
         />
         <button
-          className="login__btn mt-[40px] text-preset-4 flex justify-center items-center"
+          className="btn--submit mt-[40px] text-preset-4 flex justify-center items-center"
           type="submit"
           aria-label="Log in to your account"
         >
@@ -57,7 +64,7 @@ export default function Login() {
         </button>
       </form>
 
-      <p className="text-preset-4 mt-[40px] flex justify-center items-center gap-2">
+      <p className="text-preset-4 mt-[20px] flex justify-center items-center gap-2">
         <span className="text-white-custom">Don’t have an account?</span>
         <Link className="text-red-500" to="/signup" aria-label="Sign Up">
           Sign Up

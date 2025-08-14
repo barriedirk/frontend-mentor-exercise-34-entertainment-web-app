@@ -4,6 +4,7 @@
 @import "./base/reset.css";
 
 @import "./components/grid.css";
+@import "./components/button.css";
 
 @import "./helpers/typography.css";
 @import "./helpers/utilities.css";

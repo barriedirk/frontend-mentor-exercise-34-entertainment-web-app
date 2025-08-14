@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import useChangeBodyStyle from "@/hooks/useChangeBodyStyle";
 
 import Header from "./Header";
+import Footer from "./Footer";
 
 export default function AuthLayout() {
   useChangeBodyStyle("background-color: var(--clr-blue-950);");
@@ -15,6 +16,7 @@ export default function AuthLayout() {
       <main className="auth-layout">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }
