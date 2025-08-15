@@ -1,5 +1,7 @@
 import "./SignUp.css";
 
+import { useEffect } from "react";
+
 import { Link } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,10 +13,23 @@ import {
 } from "@/features/auth/schemas/signUp";
 
 import InputForm from "@/components/forms/fields/FormInput";
+
 import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
+import { useApi } from "@/hooks/useApi";
+import { register, type RegresResponse } from "@/api/reqres";
 
 function SignUp() {
   const containerRef = useFocusFirstInput<HTMLFormElement>();
+
+  const {
+    loading: loadingApi,
+    error: errorApi,
+    data: responseApi,
+    fetch: fetchApi,
+  } = useApi<RegresResponse, [string, string]>(register, {
+    autoFetch: false,
+    params: ["", ""],
+  });
 
   const {
     control,
@@ -25,8 +40,16 @@ function SignUp() {
     mode: "onBlur",
   });
 
+  useEffect(() => {
+    if (!loadingApi && !errorApi) {
+      console.log({ responseApi });
+    }
+  }, [loadingApi, errorApi, responseApi]);
+
   const onSubmit: SubmitHandler<SignUpFormValues> = (data) => {
-    console.log(data);
+    console.log("Submit form data:", data);
+
+    fetchApi([data.email, data.password]);
   };
 
   return (
