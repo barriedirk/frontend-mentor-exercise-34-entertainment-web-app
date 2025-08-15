@@ -24,6 +24,25 @@
 }
 
 .header__profile {
+  position: relative;
+
+  button {
+    position: absolute;
+    right: 0;
+    background-color: var(--clr-blue-900);
+    color: var(--clr-white);
+    padding: 20;
+    padding: 15px;
+
+    opacity: 0;
+    transform: translateX(-99999px) translateY(-99999px);
+    transition: all 0.5 ease-in;
+  }
+
+  &:hover button {
+    opacity: 1;
+    transform: translateX(20px) translateY(0);
+  }
 }
 
 @media screen and (min-width: 48px) {

@@ -6,6 +6,8 @@ import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
+import { AuthProvider } from "@/context/AuthProvider";
+
 import { configureStore } from "@/state/store";
 import { loadBookmarksState } from "@/state/helpers/loadStateFromLocalStorage";
 
@@ -21,9 +23,11 @@ async function init() {
     <StrictMode>
       <Provider store={store}>
         <HashRouter>
-          <Suspense fallback={<Loading />}>
-            <App />
-          </Suspense>
+          <AuthProvider>
+            <Suspense fallback={<Loading />}>
+              <App />
+            </Suspense>
+          </AuthProvider>
         </HashRouter>
       </Provider>
     </StrictMode>

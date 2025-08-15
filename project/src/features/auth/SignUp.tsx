@@ -1,8 +1,6 @@
 import "./SignUp.css";
 
-import { useEffect } from "react";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm } from "react-hook-form";
@@ -15,21 +13,12 @@ import {
 import InputForm from "@/components/forms/fields/FormInput";
 
 import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
-import { useApi } from "@/hooks/useApi";
-import { register, type RegresResponse } from "@/api/reqres";
+
+import { supabase } from "@/api/supabase";
 
 function SignUp() {
+  const navigate = useNavigate();
   const containerRef = useFocusFirstInput<HTMLFormElement>();
-
-  const {
-    loading: loadingApi,
-    error: errorApi,
-    data: responseApi,
-    fetch: fetchApi,
-  } = useApi<RegresResponse, [string, string]>(register, {
-    autoFetch: false,
-    params: ["", ""],
-  });
 
   const {
     control,
@@ -40,16 +29,20 @@ function SignUp() {
     mode: "onBlur",
   });
 
-  useEffect(() => {
-    if (!loadingApi && !errorApi) {
-      console.log({ responseApi });
+  const onSubmit: SubmitHandler<SignUpFormValues> = async ({
+    email,
+    password,
+  }) => {
+    const { error, data } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (data.session) {
+      navigate("/");
     }
-  }, [loadingApi, errorApi, responseApi]);
 
-  const onSubmit: SubmitHandler<SignUpFormValues> = (data) => {
-    console.log("Submit form data:", data);
-
-    fetchApi([data.email, data.password]);
+    console.log({ error, data });
   };
 
   return (

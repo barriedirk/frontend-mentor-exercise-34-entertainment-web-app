@@ -1,13 +1,15 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-const isAuthenticated = () => {
-  return false;
-  // @todo, replace it with React context or state from a global store
-  // return !!localStorage.getItem("token"); // or use a context/global state
-};
+import useAuth from "@/context/useAuth";
 
 function AuthGuard() {
-  return isAuthenticated() ? <Outlet /> : <Navigate to="/login" replace />;
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return user ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 export default AuthGuard;

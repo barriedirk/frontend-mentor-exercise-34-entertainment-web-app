@@ -9,6 +9,8 @@ import { useKeyboardShortcut } from "@/hooks/useKeyboardShortcut";
 import Icon from "@/components/Icon";
 import Avatar from "@/components/Avatar";
 
+import { supabase } from "@/api/supabase";
+
 interface HeaderProps {
   className?: string;
 }
@@ -20,6 +22,12 @@ export default function Header({ className }: HeaderProps) {
   useKeyboardShortcut("m", () => navigate("/movies"), []);
   useKeyboardShortcut("t", () => navigate("/tv"), ["alt"]);
   useKeyboardShortcut("b", () => navigate("/bookmarks"), ["alt"]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+
+    window.location.reload();
+  };
 
   const classNameLink = clsx(
     "focus:outline-none focus-visible:ring-2 focus-visible:ring-white",
@@ -105,6 +113,13 @@ export default function Header({ className }: HeaderProps) {
 
       <div className={clsx(styles["header__profile"], "lg:mt-auto")}>
         <Avatar className={clsx(styles["header__avatar"])} />
+
+        <button
+          className="header__profile--logout text-preset-4"
+          onClick={() => handleLogout()}
+        >
+          Logout
+        </button>
       </div>
     </header>
   );

@@ -1,8 +1,6 @@
 import "./Login.css";
 
-import { useEffect } from "react";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SubmitHandler, useForm } from "react-hook-form";
@@ -15,21 +13,12 @@ import {
 import InputForm from "@/components/forms/fields/FormInput";
 
 import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
-import { useApi } from "@/hooks/useApi";
-import { login, type RegresResponse } from "@/api/reqres";
+
+import { supabase } from "@/api/supabase";
 
 export default function Login() {
+  const navigate = useNavigate();
   const containerRef = useFocusFirstInput<HTMLFormElement>();
-
-  const {
-    loading: loadingApi,
-    error: errorApi,
-    data: responseApi,
-    fetch: fetchApi,
-  } = useApi<RegresResponse, [string, string]>(login, {
-    autoFetch: false,
-    params: ["", ""],
-  });
 
   const {
     control,
@@ -40,21 +29,28 @@ export default function Login() {
     mode: "onChange",
   });
 
-  useEffect(() => {
-    if (!loadingApi && !errorApi) {
-      console.log({ responseApi });
+  const onSubmit: SubmitHandler<LoginFormValues> = async ({
+    email,
+    password,
+  }) => {
+    const { error, data } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (data.session) {
+      navigate("/");
     }
-  }, [loadingApi, errorApi, responseApi]);
 
-  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    console.log("Submit form data:", data);
+    console.log({ error, data });
+  };
 
-    fetchApi([data.email, data.password]);
+  const loginWithDemoCredential = () => {
+    onSubmit({ email: "demobarrie@fakeemail.com", password: "3nT3rt4inMen1" });
   };
 
   return (
     <>
-      {loadingApi && <p>... verify credentials ...</p>}
       <div className="login">
         <h1 id="login-heading" className="text-preset-1 mb-[40px]">
           Login
@@ -96,13 +92,25 @@ export default function Login() {
             Sign Up
           </Link>
         </p>
+        <p className="text-preset-4 mt-[20px] flex justify-center items-center gap-2">
+          <span className="text-white-custom">
+            If you don't want to play with login/signup and go directly
+          </span>
+          <button
+            className="text-red-500"
+            aria-label="Sign Up"
+            onClick={() => loginWithDemoCredential()}
+          >
+            you can use the Demo Credentials
+          </button>
+        </p>
       </div>
 
-      {errorApi && (
+      {/* {errorApi && (
         <p className="text-red-500 text-preset-4">
           There is an error with the credentials: {String(errorApi)}
         </p>
-      )}
+      )} */}
     </>
   );
 }
