@@ -1,5 +1,8 @@
 import "./Login.css";
 
+import { useState } from "react";
+import { supabase } from "@/api/supabase";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,9 +17,8 @@ import InputForm from "@/components/forms/fields/FormInput";
 
 import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
 
-import { supabase } from "@/api/supabase";
-
 export default function Login() {
+  const [errorApi, setErrorApi] = useState<string>();
   const navigate = useNavigate();
   const containerRef = useFocusFirstInput<HTMLFormElement>();
 
@@ -27,6 +29,10 @@ export default function Login() {
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit: SubmitHandler<LoginFormValues> = async ({
@@ -42,11 +48,16 @@ export default function Login() {
       navigate("/");
     }
 
-    console.log({ error, data });
+    if (error) {
+      setErrorApi(error?.message);
+    }
   };
 
   const loginWithDemoCredential = () => {
-    onSubmit({ email: "demobarrie@fakeemail.com", password: "3nT3rt4inMen1" });
+    onSubmit({
+      email: "demo-entertainment-web-app@fakeemail.com",
+      password: "3nT3rt4inMen1",
+    });
   };
 
   return (
@@ -78,7 +89,7 @@ export default function Login() {
           />
           <button
             className="btn--submit mt-[40px] text-preset-4 flex justify-center items-center"
-            type="submit"
+            type="button"
             aria-label="Log in to your account"
             disabled={!isValid || isSubmitting}
           >
@@ -92,25 +103,25 @@ export default function Login() {
             Sign Up
           </Link>
         </p>
-        <p className="text-preset-4 mt-[20px] flex justify-center items-center gap-2">
-          <span className="text-white-custom">
-            If you don't want to play with login/signup and go directly
-          </span>
+        <div className="text-preset-5 mt-[20px] flex justify-center items-center gap-2 text-white-custom">
+          <span>Use</span>
           <button
-            className="text-red-500"
-            aria-label="Sign Up"
+            type="button"
+            className="text-red-500 underline"
+            aria-label="Login with demo credentials"
             onClick={() => loginWithDemoCredential()}
           >
-            you can use the Demo Credentials
+            Login Credentials
           </button>
-        </p>
+          <span>to explore the demo.</span>
+        </div>
       </div>
 
-      {/* {errorApi && (
+      {errorApi && (
         <p className="text-red-500 text-preset-4">
           There is an error with the credentials: {String(errorApi)}
         </p>
-      )} */}
+      )}
     </>
   );
 }

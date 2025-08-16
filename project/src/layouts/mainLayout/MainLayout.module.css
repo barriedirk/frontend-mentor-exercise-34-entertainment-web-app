@@ -42,3 +42,10 @@
     grid-column: span 2;
   }
 }
+
+@media screen and (min-width: 90em) {
+  .ml {
+    margin-inline: auto;
+    max-width: 1400px;
+  }
+}

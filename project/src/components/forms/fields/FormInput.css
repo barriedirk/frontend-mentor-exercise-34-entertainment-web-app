@@ -19,16 +19,15 @@
 
 .form-group input {
   color: var(--clr-white);
-  max-width: 200px;
   border: none;
   padding: 5px 20px;
   font-size: 15px;
-  flex: 1 1 0;
+  flex: 1;
   outline: none;
 }
 
-.form-group input:focus {
-  outline: 1px solid var(--clr-white-20);
+.form-group:has(input:focus) {
+  border-bottom: 1px solid var(--clr-white);
 }
 
 .form-group input::placeholder {

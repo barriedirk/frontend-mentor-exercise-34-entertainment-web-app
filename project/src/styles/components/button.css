@@ -6,4 +6,14 @@
     width: 100%;
     min-height: 48px;
   }
+
+  .btn--submit:is(:hover, :active) {
+    background-color: var(--clr-white);
+    color: var(--clr-blue-950);
+  }
+
+  .btn--submit:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 }

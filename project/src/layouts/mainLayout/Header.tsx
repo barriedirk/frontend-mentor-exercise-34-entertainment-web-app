@@ -10,6 +10,7 @@ import Icon from "@/components/Icon";
 import Avatar from "@/components/Avatar";
 
 import { supabase } from "@/api/supabase";
+import { useEffect, useRef, useState } from "react";
 
 interface HeaderProps {
   className?: string;
@@ -17,6 +18,35 @@ interface HeaderProps {
 
 export default function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
+
+  const [isExpanded, setIsExpanded] = useState(false);
+  const refProfile = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsExpanded(false);
+      }
+    };
+
+    if (isExpanded) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isExpanded]);
+
+  useEffect(() => {
+    if (isExpanded && refProfile.current) {
+      const firstFocusable = refProfile.current.querySelector(
+        "#profile-options button"
+      );
+
+      (firstFocusable as HTMLElement)?.focus();
+    }
+  }, [isExpanded]);
 
   useKeyboardShortcut("h", () => navigate("/"), ["alt"]);
   useKeyboardShortcut("m", () => navigate("/movies"), []);
@@ -29,8 +59,12 @@ export default function Header({ className }: HeaderProps) {
     window.location.reload();
   };
 
+  const toggleOptions = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   const classNameLink = clsx(
-    "focus:outline-none focus-visible:ring-2 focus-visible:ring-white",
+    "focus:outline-none focus-visible:ring-2 focus-visible:ring-white hover:text-red-500",
     styles["header__link"]
   );
 
@@ -60,7 +94,7 @@ export default function Header({ className }: HeaderProps) {
             clsx(
               "h-[20px] w-[20px]",
               classNameLink,
-              isActive && "text-white",
+              isActive && "text-white hover:text-white",
               !isActive && "text-blue-500"
             )
           }
@@ -72,7 +106,7 @@ export default function Header({ className }: HeaderProps) {
             clsx(
               "h-[20px] w-[20px]",
               classNameLink,
-              isActive && "text-white",
+              isActive && "text-white hover:text-white",
               !isActive && "text-blue-500"
             )
           }
@@ -86,7 +120,7 @@ export default function Header({ className }: HeaderProps) {
             clsx(
               "h-[20px] w-[20px]",
               classNameLink,
-              isActive && "text-white",
+              isActive && "text-white hover:text-white",
               !isActive && "text-blue-500"
             )
           }
@@ -100,7 +134,7 @@ export default function Header({ className }: HeaderProps) {
             clsx(
               "h-[20px] w-[20px]",
               classNameLink,
-              isActive && "text-white",
+              isActive && "text-white hover:text-white",
               !isActive && "text-blue-500"
             )
           }
@@ -111,15 +145,42 @@ export default function Header({ className }: HeaderProps) {
         </NavLink>
       </nav>
 
-      <div className={clsx(styles["header__profile"], "lg:mt-auto")}>
-        <Avatar className={clsx(styles["header__avatar"])} />
-
+      <div
+        className={clsx(
+          styles["header__profile"],
+          {
+            [styles.expanded]: isExpanded,
+          },
+          "flex justify-center items-center lg:mt-auto"
+        )}
+        ref={refProfile}
+      >
         <button
-          className="header__profile--logout text-preset-4"
-          onClick={() => handleLogout()}
+          className="w-fit h-fit"
+          onClick={toggleOptions}
+          aria-haspopup="true"
+          aria-expanded={isExpanded}
+          aria-controls="profile-options"
         >
-          Logout
+          <Avatar className={clsx(styles["header__avatar"])} />
         </button>
+        <div
+          id="profile-options"
+          className={clsx(styles["header__options"])}
+          aria-label="Profile Options"
+          role="group"
+          aria-expanded={isExpanded}
+        >
+          <button
+            className={clsx(
+              styles["header__logout"],
+              "header__profile--logout text-preset-4"
+            )}
+            onClick={() => handleLogout()}
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </header>
   );

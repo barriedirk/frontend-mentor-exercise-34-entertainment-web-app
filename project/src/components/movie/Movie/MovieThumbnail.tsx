@@ -14,7 +14,7 @@ export default function MovieThumbnail() {
   return (
     <img
       className={clsx("radius-8px")}
-      style={{ maxHeight: "150px", width: "auto" }}
+      style={{ maxHeight: "150px", width: "auto", maxWidth: "100px" }}
       src={thumbnail.small}
       alt={`Thumbnail for ${item.title} (${item.category}, ${item.year})`}
     />
