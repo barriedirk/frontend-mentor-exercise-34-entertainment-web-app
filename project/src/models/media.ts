@@ -16,9 +16,18 @@ export interface MediaInfo {
 
 export interface MediaThumbnail {
   thumbnail: {
-    trending: { small: string; large: string };
-    regular: { small: string; medium: string; large: string };
+    trending: MediaThumbnailTrending;
+    regular: MediaThumbnailRegular;
   };
+}
+
+export interface MediaThumbnailTrending {
+  small: string;
+  large: string;
+}
+
+export interface MediaThumbnailRegular extends MediaThumbnailTrending {
+  medium: string;
 }
 
 export interface MediaItem extends MediaInfo, MediaThumbnail {}

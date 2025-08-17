@@ -1,6 +1,7 @@
 import "./SignUp.css";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import { supabase } from "@/api/supabase";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -35,6 +36,18 @@ function SignUp() {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    let timeId: ReturnType<typeof setTimeout>;
+
+    if (errorApi) {
+      timeId = setTimeout(() => setErrorApi(""), 5000);
+    }
+
+    return () => {
+      if (timeId) clearTimeout(timeId);
+    };
+  }, [errorApi]);
 
   const onSubmit: SubmitHandler<SignUpFormValues> = async ({
     email,
@@ -97,6 +110,12 @@ function SignUp() {
           >
             Create an account
           </button>
+
+          {errorApi && (
+            <p className="text-red-500 text-preset-3 text-center my-2">
+              {String(errorApi)}
+            </p>
+          )}
         </form>
 
         <p className="text-preset-4 mt-[20px] flex justify-center items-center gap-2">
@@ -106,11 +125,6 @@ function SignUp() {
           </Link>
         </p>
       </div>
-      {errorApi && (
-        <p className="text-red-500 text-preset-4">
-          There is an error with the credentials: {String(errorApi)}
-        </p>
-      )}
     </>
   );
 }

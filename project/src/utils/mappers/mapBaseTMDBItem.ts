@@ -14,10 +14,10 @@ export function mapBaseTMDBItem(
 ): MediaItem {
   const poster = posterPath
     ? `${posterBase}${posterPath}`
-    : "/assets/placeholder.svg";
+    : `${import.meta.env.BASE_URL}/assets/placeholder.svg`;
   const backdrop = backdropPath
     ? `${backdropBase}${backdropPath}`
-    : "/assets/placeholder.svg";
+    : `${import.meta.env.BASE_URL}/assets/placeholder.svg`;
 
   return {
     id,

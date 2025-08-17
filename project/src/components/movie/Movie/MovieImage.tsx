@@ -1,11 +1,14 @@
 import clsx from "clsx";
 
+import { useRef } from "react";
+
 import styles from "./Movie.module.css";
 
 import { useMovieContext } from "./MovieContext";
 
 export default function MovieImage() {
   const { item, type, isLoaded, setIsLoaded } = useMovieContext();
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
   const isRegular = type === "regular";
   const isTrending = type === "trending";
@@ -30,6 +33,7 @@ export default function MovieImage() {
       )}
 
       <img
+        ref={imgRef}
         loading="lazy"
         className={clsx(
           styles["movie__image"],
@@ -40,6 +44,11 @@ export default function MovieImage() {
           isLoaded && styles["movie__image--loaded"]
         )}
         onLoad={() => setIsLoaded(true)}
+        onError={() => {
+          if (imgRef?.current) {
+            imgRef.current.src = `${import.meta.env.BASE_URL}/assets/placeholder.svg`;
+          }
+        }}
         src={thumbnail.small}
         alt={`Thumbnail for ${item.title} (${item.category}, ${item.year})`}
       />

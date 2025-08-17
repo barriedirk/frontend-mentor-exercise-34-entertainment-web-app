@@ -14,10 +14,6 @@ export default function MovieBookmark() {
   const { addBookmark, deleteBookmark } = useActions();
 
   const toggle = () => {
-    console.log(
-      `Bookmark toggled for: ${idBookmark} / ${item.title} : ${isBookmarkHosted}`
-    );
-
     if (isBookmarkHosted) {
       deleteBookmark(idBookmark);
     } else {

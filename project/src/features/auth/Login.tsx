@@ -1,6 +1,7 @@
 import "./Login.css";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import { supabase } from "@/api/supabase";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ import InputForm from "@/components/forms/fields/FormInput";
 import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
 
 export default function Login() {
-  const [errorApi, setErrorApi] = useState<string>();
+  const [errorApi, setErrorApi] = useState<string | null>(null);
   const navigate = useNavigate();
   const containerRef = useFocusFirstInput<HTMLFormElement>();
 
@@ -34,6 +35,18 @@ export default function Login() {
       password: "",
     },
   });
+
+  useEffect(() => {
+    let timeId: ReturnType<typeof setTimeout>;
+
+    if (errorApi) {
+      timeId = setTimeout(() => setErrorApi(""), 5000);
+    }
+
+    return () => {
+      if (timeId) clearTimeout(timeId);
+    };
+  }, [errorApi]);
 
   const onSubmit: SubmitHandler<LoginFormValues> = async ({
     email,
@@ -95,6 +108,12 @@ export default function Login() {
           >
             Login to your account
           </button>
+
+          {errorApi && (
+            <p className="text-red-500 text-preset-3 text-center my-2">
+              {String(errorApi)}
+            </p>
+          )}
         </form>
 
         <p className="text-preset-4 mt-[20px] flex justify-center items-center gap-2">
@@ -116,12 +135,6 @@ export default function Login() {
           <span>to explore the demo.</span>
         </div>
       </div>
-
-      {errorApi && (
-        <p className="text-red-500 text-preset-4">
-          There is an error with the credentials: {String(errorApi)}
-        </p>
-      )}
     </>
   );
 }

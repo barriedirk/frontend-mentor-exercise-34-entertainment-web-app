@@ -6,16 +6,48 @@ import clsx from "clsx";
 import styles from "./Home.module.css";
 
 import { useDebouncedSignal } from "@/hooks/useDebouncedSignal";
+
 import Movie from "@/components/movie/Movie";
 import Search from "@/components/forms/search/Search";
 
+interface ThumbnailSizeMap {
+  large?: string;
+  medium?: string;
+  small?: string;
+}
+
 import type { MediaItem } from "@/models/media";
 import mediaData from "@/data/data.json";
+import { useMemo } from "react";
 
 export default function Mockup() {
   useSignals();
 
-  const items = mediaData as MediaItem[];
+  const items = useMemo(() => {
+    const clonedData = (mediaData as MediaItem[]).map((originalItem) => {
+      const item = structuredClone(originalItem);
+      const { trending, regular } = item.thumbnail;
+
+      [trending, regular].forEach((thumb) => {
+        if (!thumb) return;
+
+        const image = thumb as ThumbnailSizeMap;
+
+        ["large", "medium", "small"].forEach((size) => {
+          const key = size as keyof ThumbnailSizeMap;
+
+          if (image[key] && !image[key]!.startsWith(import.meta.env.BASE_URL)) {
+            image[key] = `${import.meta.env.BASE_URL}${image[key]}`;
+          }
+        });
+      });
+
+      return item;
+    });
+
+    return clonedData;
+  }, []);
+
   const searchTerm = useSignal<string>("");
   const debouncedSearchTerm = useDebouncedSignal(searchTerm, 500);
 
@@ -69,7 +101,16 @@ export default function Mockup() {
               </p>
             ) : (
               trendingItems.value.map((item) => (
-                <Movie key={item.title} type="trending" item={item} />
+                <Movie
+                  key={`${item.category}-${item.id ?? ""}-${item.title}`}
+                  item={item}
+                  type="trending"
+                >
+                  <Movie.Image />
+                  <Movie.Caption />
+                  <Movie.PlayButton />
+                  <Movie.Bookmark />
+                </Movie>
               ))
             )}
           </section>
@@ -101,7 +142,16 @@ export default function Mockup() {
           )}
         >
           {recommendedItems.value.map((item) => (
-            <Movie key={item.title} type="regular" item={item} />
+            <Movie
+              key={`${item.category}-${item.id ?? ""}-${item.title}`}
+              item={item}
+              type="regular"
+            >
+              <Movie.Image />
+              <Movie.Caption />
+              <Movie.PlayButton />
+              <Movie.Bookmark />
+            </Movie>
           ))}
         </section>
       </div>

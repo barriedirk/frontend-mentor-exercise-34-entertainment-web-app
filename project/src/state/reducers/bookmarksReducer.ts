@@ -17,8 +17,6 @@ const reducer = produce(
         state.data[id] = item;
         state.list = [...state.list, id];
 
-        console.log("add", action.payload);
-
         return state;
       }
 
@@ -27,8 +25,6 @@ const reducer = produce(
 
         state.list = state.list.filter((id) => id != idToRemove);
         delete state.data[idToRemove];
-
-        console.log("remove", action.payload);
 
         return state;
       }

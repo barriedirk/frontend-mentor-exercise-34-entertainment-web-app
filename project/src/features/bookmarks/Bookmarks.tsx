@@ -13,8 +13,6 @@ export default function Bookmarks() {
 
   const bookmarks = useBookmarkList();
 
-  console.log("bookmarks", { bookmarks });
-
   const topRef = useRef<HTMLDivElement | null>(null);
 
   const [shouldScroll, setShouldScroll] = useState(false);
