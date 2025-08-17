@@ -8,10 +8,10 @@ import type {
   DeleteMediaAction,
   ClearMediaAction,
   Action,
-} from "@state/actions";
+} from "@/state/actions";
 
 import type { MediaItem } from "@/models/media";
-import type { RootState } from "@state/reducers";
+import type { RootState } from "@/state/reducers";
 
 export const addBookmark = (id: string, item: MediaItem): AddMediaAction => {
   return {
@@ -37,7 +37,7 @@ export const clearBookmark = (): ClearMediaAction => {
 };
 
 export const saveBookmarks = () => {
-  return async (dispatch: Dispatch<Action>, getState: () => RootState) => {
+  return async (_dispatch: Dispatch<Action>, getState: () => RootState) => {
     const { bookmarks } = getState();
 
     try {
