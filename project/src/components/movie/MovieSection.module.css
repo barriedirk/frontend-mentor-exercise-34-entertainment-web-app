@@ -1,3 +1,28 @@
+.media-section--list {
+  overflow: auto;
+  scrollbar-width: none;
+  overflow-y: hidden;
+}
+
+.media-section--list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.media-section--list:hover {
+  scrollbar-width: thin;
+}
+
+.media-section--list:hover::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.media-section--list:hover::-webkit-scrollbar-thumb {
+  background-color: var(--clr-white);
+  border-radius: 4px;
+}
+
 .media-section--page {
   display: none;
 

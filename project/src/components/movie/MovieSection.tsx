@@ -80,6 +80,7 @@ const MovieSection = forwardRef<HTMLDivElement, MovieSectionProps>(
           role="region"
           aria-label={ariaLabel}
           className={clsx(
+            styles["media-section--list"],
             "gap-5",
             sectionType === "trending"
               ? "grid-result grid-result--trending"
