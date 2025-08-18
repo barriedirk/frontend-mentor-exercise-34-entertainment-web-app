@@ -8,6 +8,8 @@ import type {
   UseApiResult,
 } from "@/models/useApiCall";
 
+import { loadingSignal } from "@/services/loadingSignal";
+
 export const useApi = <T, P>(
   apiCall: (param: P) => UseApiCall<T>,
   options?: UseApiOptions<P>
@@ -31,6 +33,8 @@ export const useApi = <T, P>(
 
       setLoading(true);
 
+      loadingSignal.show();
+
       call
         .then((response) => {
           setData(response);
@@ -43,6 +47,7 @@ export const useApi = <T, P>(
         })
         .finally(() => {
           setLoading(false);
+          loadingSignal.hide();
         });
 
       // return () => controller.abort();

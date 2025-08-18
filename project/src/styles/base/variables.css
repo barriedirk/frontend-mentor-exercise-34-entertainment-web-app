@@ -14,6 +14,13 @@
     --clr-blue-500: hsl(223, 23%, 46%);
     --clr-blue-500-80: hsla(223, 23%, 46%, 0.8);
 
+    --clr-grey-950: hsl(200, 15%, 8%);
+    --clr-grey-400: hsl(0, 0%, 50%);
+    --clr-grey-350: hsl(0, 0%, 59%);
+    --clr-grey-300: hsl(0, 0%, 70%);
+    --clr-grey-250: hsl(0, 0%, 77%);
+    --clr-grey-50: hsl(0, 0%, 99%);
+
     --clr-red-500: hsl(0, 97%, 63%);
 
     --gradient-to-bottom: linear-gradient(

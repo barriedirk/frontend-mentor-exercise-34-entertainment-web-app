@@ -18,6 +18,8 @@ import InputForm from "@/components/forms/fields/FormInput";
 
 import { useFocusFirstInput } from "@/hooks/useFocusFirstInput";
 
+import { loadingSignal } from "@/services/loadingSignal";
+
 export default function Login() {
   const [errorApi, setErrorApi] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -52,17 +54,23 @@ export default function Login() {
     email,
     password,
   }) => {
-    const { error, data } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    loadingSignal.show();
 
-    if (data.session) {
-      navigate("/");
-    }
+    try {
+      const { error, data } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setErrorApi(error?.message);
+      if (data.session) {
+        navigate("/");
+      }
+
+      if (error) {
+        setErrorApi(error?.message);
+      }
+    } finally {
+      loadingSignal.hide();
     }
   };
 
